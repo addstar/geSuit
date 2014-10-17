@@ -20,7 +20,7 @@ public class BansConfig extends Config {
     public Boolean DetectAltAccounts = true;
     public Boolean ShowAltAccountsOnlyIfBanned = true;
     
-    public HashMap<Integer, String> Actions;
+    public HashMap<Integer, String> Actions = new HashMap<>();
     
     public GeoIPSettings GeoIP = new GeoIPSettings();
 }
