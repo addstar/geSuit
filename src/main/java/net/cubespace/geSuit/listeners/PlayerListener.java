@@ -52,6 +52,9 @@ public class PlayerListener implements Listener {
     		final GSPlayer p = PlayerManager.confirmJoin(e.getPlayer());
     		p.setServer(e.getServer().getInfo().getName());
     		
+    		if (ConfigManager.main.BroadcastProxyConnectionMessages) {
+    			PlayerManager.sendBroadcast(ConfigManager.messages.PLAYER_CONNECT_PROXY.replace("{player}", p.getName()));
+    		}
     		final boolean newspawn = p.isNewSpawn();
 
 			// Check if an existing player has a "newspawn" flag... send them to new player spawn

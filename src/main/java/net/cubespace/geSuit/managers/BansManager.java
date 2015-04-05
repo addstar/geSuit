@@ -1,5 +1,6 @@
 package net.cubespace.geSuit.managers;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -16,6 +17,10 @@ import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import net.cubespace.geSuit.TimeParser;
 import net.cubespace.geSuit.Utilities;
 import net.cubespace.geSuit.geSuit;
+import net.cubespace.geSuit.events.BanPlayerEvent;
+import net.cubespace.geSuit.events.UnbanPlayerEvent;
+import net.cubespace.geSuit.events.WarnPlayerEvent;
+import net.cubespace.geSuit.events.WarnPlayerEvent.ActionType;
 import net.cubespace.geSuit.objects.Ban;
 import net.cubespace.geSuit.objects.GSPlayer;
 import net.cubespace.geSuit.objects.TimeRecord;
@@ -25,6 +30,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.Event;
 
 public class BansManager {
 
@@ -56,6 +62,8 @@ public class BansManager {
         }
 
         DatabaseManager.bans.banPlayer(t.name, t.uuid, null, bannedBy, reason, "ban");
+        
+        callEvent(new BanPlayerEvent(new Ban(-1, t.name, t.uuid, null, bannedBy, reason, "ban", 1, null, null), auto));
 
         // Player is online so kick them
         if ((t.gsp != null) && (t.gsp.getProxiedPlayer() != null)) {
@@ -87,6 +95,7 @@ public class BansManager {
         Ban b = DatabaseManager.bans.getBanInfo(t.name, t.uuid, player);
 
         DatabaseManager.bans.unbanPlayer(b.getId());
+        callEvent(new UnbanPlayerEvent(b, sentBy));
 
         if (ConfigManager.bans.BroadcastUnbans) {
             PlayerManager.sendBroadcast(ConfigManager.messages.PLAYER_UNBANNED.replace("{player}", t.dispname).replace("{sender}", sender.getName()));
@@ -126,6 +135,7 @@ public class BansManager {
 
         if (!DatabaseManager.bans.isPlayerBanned(ip)) {
             DatabaseManager.bans.banPlayer(player, uuid, ip, bannedBy, reason, "ipban");
+            callEvent(new BanPlayerEvent(new Ban(-1, player, uuid, ip, bannedBy, reason, "ipban", 1, null, null), false));
         }
 
         for (GSPlayer p : PlayerManager.getPlayersByIP(ip)) {
@@ -301,6 +311,7 @@ public class BansManager {
         String shortTimeDiff = Utilities.buildShortTimeDiffString(seconds * 1000, 10);
 
         DatabaseManager.bans.tempBanPlayer(t.name, t.uuid, bannedBy, message, sdf.format(sqlToday));
+        callEvent(new BanPlayerEvent(new Ban(-1, t.name, t.uuid, null, bannedBy, message, "tempban", 1, null, new Timestamp(System.currentTimeMillis() + (seconds * 1000))), auto));
 
         if ((t.gsp != null) && (t.gsp.getProxiedPlayer() != null)) {
             disconnectPlayer(t.gsp.getProxiedPlayer(), ConfigManager.messages.TEMP_BAN_MESSAGE.replace("{sender}", t.dispname).replace("{time}", time).replace("{left}", timeDiff).replace("{shortleft}", shortTimeDiff).replace("{message}", message));
@@ -351,10 +362,13 @@ public class BansManager {
             PlayerManager.sendMessageToTarget(sender, ConfigManager.messages.WARN_PLAYER_BROADCAST.replace("{player}", t.dispname).replace("{message}", reason).replace("{sender}", warnedBy));
         }
 
+        int warncount = 0;
+        ActionType actionType = ActionType.None;
+        String actionExtra = "";
         // Check if we have warning actions defined
         if (ConfigManager.bans.Actions != null) {
         	List<Ban> warnings = DatabaseManager.bans.getWarnHistory(t.name, t.uuid);
-        	Integer warncount = 0;
+        	warncount = 0;
             for (Ban w : warnings) {
             	// Only count warnings that have not expired
             	Date now = new Date(); 
@@ -370,15 +384,19 @@ public class BansManager {
 
         		String action = parts[0];
         		if (action.equals("kick")) {
+        		    actionType = ActionType.Kick;
         			if ((t.gsp != null) && (t.gsp.getProxiedPlayer() != null)) {
         				kickPlayer(warnedBy, t.name, reason, true);
         			}
         		}
         		else if (action.equals("tempban")) {
+        		    actionType = ActionType.TempBan;
         	        int seconds = TimeParser.parseString(parts[1]);
         			tempBanPlayer(warnedBy, t.name, seconds, reason, true);
+        			actionExtra = "for " + parts[1];
         		}
         		else if (action.equals("ban")) {
+        		    actionType = ActionType.Ban;
         			banPlayer(warnedBy, t.name, reason, true);
         		} else {
                 	PlayerManager.sendMessageToTarget(sender, ChatColor.RED + "Warning action of \"" + fullaction + "\" is invalid!");
@@ -386,6 +404,8 @@ public class BansManager {
         		}
         	}
         }
+        
+        callEvent(new WarnPlayerEvent(t.name, t.uuid, warnedBy, reason, actionType, actionExtra, warncount));
     }
 
     public static void displayPlayerWarnHistory(final String sentBy, final String player) {
@@ -686,6 +706,15 @@ public class BansManager {
                     
                     PlayerManager.sendMessageToTarget(sender, builder.toString());
                 }
+            }
+        });
+    }
+    
+    private static void callEvent(final Event event) {
+        ProxyServer.getInstance().getScheduler().runAsync(geSuit.instance, new Runnable() {
+            @Override
+            public void run() {
+                ProxyServer.getInstance().getPluginManager().callEvent(event);
             }
         });
     }
