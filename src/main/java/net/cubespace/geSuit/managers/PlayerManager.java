@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import au.com.addstar.bc.BungeeChat;
 
@@ -377,6 +376,14 @@ public class PlayerManager {
         return onlinePlayers.get(player.toLowerCase());
     }
     
+    public static GSPlayer getPlayer(String player, boolean ExpectOnline) {
+        GSPlayer p = getPlayer(player);
+        if ((p == null) && (ExpectOnline)) {
+            geSuit.instance.getLogger().warning("Unable to find player named \"" + player + "\" in onlinePlayers list!");
+        }
+        return p;
+    }
+
     public static GSPlayer getPlayer(UUID id) {
         return cachedPlayers.get(id);
     }

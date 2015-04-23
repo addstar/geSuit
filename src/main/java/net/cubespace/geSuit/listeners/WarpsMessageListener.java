@@ -51,12 +51,12 @@ public class WarpsMessageListener implements Listener {
         }
 
         if (task.equals("SetWarp")) {
-            WarpsManager.setWarp(PlayerManager.getPlayer(in.readUTF()), in.readUTF(), new Location(((Server) event.getSender()).getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean(), in.readBoolean());
+            WarpsManager.setWarp(PlayerManager.getPlayer(in.readUTF(), true), in.readUTF(), new Location(((Server) event.getSender()).getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean(), in.readBoolean());
             return;
         }
 
         if (task.equals("DeleteWarp")) {
-            WarpsManager.deleteWarp(PlayerManager.getPlayer(in.readUTF()), in.readUTF());
+            WarpsManager.deleteWarp(PlayerManager.getPlayer(in.readUTF(), true), in.readUTF());
             return;
         }
 

@@ -43,13 +43,13 @@ public class PortalsMessageListener implements Listener {
         String task = in.readUTF();
         Server s = (Server) event.getSender();
         if (task.equals("TeleportPlayer")) {
-            PortalManager.teleportPlayer(PlayerManager.getPlayer(in.readUTF()), in.readUTF(), in.readUTF(), in.readBoolean());
+            PortalManager.teleportPlayer(PlayerManager.getPlayer(in.readUTF(), true), in.readUTF(), in.readUTF(), in.readBoolean());
         } else if (task.equals("ListPortals")) {
-            PortalManager.listPortals(PlayerManager.getPlayer(in.readUTF()));
+            PortalManager.listPortals(PlayerManager.getPlayer(in.readUTF(), true));
         } else if (task.equals("DeletePortal")) {
-            PortalManager.deletePortal(PlayerManager.getPlayer(in.readUTF()), in.readUTF());
+            PortalManager.deletePortal(PlayerManager.getPlayer(in.readUTF(), true), in.readUTF());
         } else if (task.equals("SetPortal")) {
-            GSPlayer sender = PlayerManager.getPlayer(in.readUTF());
+            GSPlayer sender = PlayerManager.getPlayer(in.readUTF(), true);
             boolean selection = in.readBoolean();
             if (!selection) {
                 PlayerManager.sendMessageToTarget(sender, ConfigManager.messages.NO_SELECTION_MADE);

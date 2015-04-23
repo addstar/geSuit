@@ -42,17 +42,17 @@ public class SpawnMessageListener implements Listener {
         Server s = (Server) event.getSender();
 
         if (task.equals("SendToProxySpawn")) {
-            SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(in.readUTF()));
+            SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(in.readUTF(), true));
         } else if (task.equals("GetSpawns")) {
             SpawnManager.sendSpawns(s);
         } else if (task.equals("SetServerSpawn")) {
-            SpawnManager.setServerSpawn(PlayerManager.getPlayer(in.readUTF()), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean());
+            SpawnManager.setServerSpawn(PlayerManager.getPlayer(in.readUTF(), true), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean());
         } else if (task.equals("SetWorldSpawn")) {
-            SpawnManager.setWorldSpawn(PlayerManager.getPlayer(in.readUTF()), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean());
+            SpawnManager.setWorldSpawn(PlayerManager.getPlayer(in.readUTF(), true), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean());
         } else if (task.equals("SetNewPlayerSpawn")) {
-            SpawnManager.setNewPlayerSpawn(PlayerManager.getPlayer(in.readUTF()), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
+            SpawnManager.setNewPlayerSpawn(PlayerManager.getPlayer(in.readUTF(), true), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
         } else if (task.equals("SetProxySpawn")) {
-            SpawnManager.setProxySpawn(PlayerManager.getPlayer(in.readUTF()), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
+            SpawnManager.setProxySpawn(PlayerManager.getPlayer(in.readUTF(), true), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
         } else if (task.equals("SendVersion")) {
             LoggingManager.log(in.readUTF());
         }

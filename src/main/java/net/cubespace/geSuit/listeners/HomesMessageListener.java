@@ -48,12 +48,12 @@ public class HomesMessageListener implements Listener {
         if ( task.equals( "DeleteHome" ) ) {
             HomesManager.deleteHome(in.readUTF(), in.readUTF() );
         } else if ( task.equals( "SendPlayerHome" ) ) { //SendOtherPlayerHome sendPlayerToOtherHome
-            HomesManager.sendPlayerToHome( PlayerManager.getPlayer(in.readUTF() ), in.readUTF() );
+            HomesManager.sendPlayerToHome( PlayerManager.getPlayer(in.readUTF(), true), in.readUTF() );
         } else if ( task.equals( "SendOtherPlayerHome" ) ) {
-            HomesManager.sendPlayerToOtherHome( PlayerManager.getPlayer(in.readUTF() ), in.readUTF(), in.readUTF() );
+            HomesManager.sendPlayerToOtherHome( PlayerManager.getPlayer(in.readUTF(), true), in.readUTF(), in.readUTF() );
         } else if ( task.equals( "SetPlayersHome" ) ) {
             String player = in.readUTF();
-            GSPlayer gsPlayer = PlayerManager.getPlayer(player);
+            GSPlayer gsPlayer = PlayerManager.getPlayer(player, true);
 
             if (gsPlayer == null) {
                 gsPlayer = DatabaseManager.players.loadPlayer(player);
@@ -69,9 +69,9 @@ public class HomesMessageListener implements Listener {
 
             HomesManager.createNewHome(gsPlayer, in.readInt(), in.readInt(), in.readUTF(), new Location(((Server) event.getSender()).getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
         } else if ( task.equals( "GetHomesList" ) ) {
-            HomesManager.listPlayersHomes( PlayerManager.getPlayer( in.readUTF() ) );
+            HomesManager.listPlayersHomes( PlayerManager.getPlayer(in.readUTF(), true) );
         } else if ( task.equals( "GetOtherHomesList" ) ) {
-            HomesManager.listOtherPlayersHomes( PlayerManager.getPlayer( in.readUTF() ), in.readUTF() );
+            HomesManager.listOtherPlayersHomes( PlayerManager.getPlayer(in.readUTF(), true), in.readUTF() );
         } else if ( task.equals( "SendVersion" ) ) {
             LoggingManager.log( in.readUTF() );
         }

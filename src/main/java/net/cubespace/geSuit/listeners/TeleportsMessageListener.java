@@ -40,19 +40,19 @@ public class TeleportsMessageListener implements Listener {
         String task = in.readUTF();
 
         if (task.equals("TpAccept")) {
-            TeleportManager.acceptTeleportRequest(PlayerManager.getPlayer(in.readUTF()));
+            TeleportManager.acceptTeleportRequest(PlayerManager.getPlayer(in.readUTF(), true));
             return;
         }
 
         if (task.equals("TeleportToLocation")) {
-            GSPlayer player = PlayerManager.getPlayer(in.readUTF());
+            GSPlayer player = PlayerManager.getPlayer(in.readUTF(), true);
             String server = in.readUTF();
             TeleportToLocation.execute(player, new Location((!server.equals("")) ? server : ((Server) event.getSender()).getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble()));
             return;
         }
 
         if (task.equals("PlayersTeleportBackLocation")) {
-            GSPlayer player = PlayerManager.getPlayer(in.readUTF());
+            GSPlayer player = PlayerManager.getPlayer(in.readUTF(), true);
             if (player != null) {
             	TeleportManager.setPlayersTeleportBackLocation(player, new Location(((Server) event.getSender()).getInfo(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
             }
@@ -60,7 +60,7 @@ public class TeleportsMessageListener implements Listener {
         }
 
         if (task.equals("PlayersDeathBackLocation")) {
-            TeleportManager.setPlayersDeathBackLocation(PlayerManager.getPlayer(in.readUTF()), new Location(((Server) event.getSender()).getInfo(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
+            TeleportManager.setPlayersDeathBackLocation(PlayerManager.getPlayer(in.readUTF(), true), new Location(((Server) event.getSender()).getInfo(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()));
             return;
         }
 
@@ -80,7 +80,7 @@ public class TeleportsMessageListener implements Listener {
         }
 
         if (task.equals("TpDeny")) {
-            TeleportManager.denyTeleportRequest(PlayerManager.getPlayer(in.readUTF()));
+            TeleportManager.denyTeleportRequest(PlayerManager.getPlayer(in.readUTF(), true));
             return;
         }
 
@@ -90,12 +90,12 @@ public class TeleportsMessageListener implements Listener {
         }
 
         if (task.equals("SendPlayerBack")) {
-            TeleportManager.sendPlayerToLastBack(PlayerManager.getPlayer(in.readUTF()), in.readBoolean(), in.readBoolean());
+            TeleportManager.sendPlayerToLastBack(PlayerManager.getPlayer(in.readUTF(), true), in.readBoolean(), in.readBoolean());
             return;
         }
 
         if (task.equals("ToggleTeleports")) {
-            TeleportManager.togglePlayersTeleports(PlayerManager.getPlayer(in.readUTF()));
+            TeleportManager.togglePlayersTeleports(PlayerManager.getPlayer(in.readUTF(), true));
             return;
         }
 
