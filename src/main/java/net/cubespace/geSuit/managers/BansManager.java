@@ -258,6 +258,8 @@ public class BansManager {
             } else {
             	PlayerManager.sendBroadcast(Utilities.colorize(ConfigManager.messages.KICK_PLAYER_BROADCAST.replace("{message}", reason).replace("{player}", t.dispname).replace("{sender}", sender.getName())), t.name);
             }
+        } else {
+            PlayerManager.sendMessageToTarget(sender, ConfigManager.messages.KICK_PLAYER_BROADCAST.replace("{message}", reason).replace("{player}", t.dispname).replace("{sender}", sender.getName()));
         }
     }
 
