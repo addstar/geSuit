@@ -154,8 +154,9 @@ public class Players implements IRepository {
             insertPlayerConvert.setString(1, player);
             insertPlayerConvert.setString(2, uuid);
             insertPlayerConvert.setTimestamp(3, lastonline);
-            insertPlayerConvert.setString(4, ip);
-            insertPlayerConvert.setBoolean(5, tps);
+            insertPlayerConvert.setTimestamp(4, lastonline);
+            insertPlayerConvert.setString(5, ip);
+            insertPlayerConvert.setBoolean(6, tps);
 
             insertPlayerConvert.executeUpdate();
         } catch (Exception e) {
@@ -413,7 +414,7 @@ public class Players implements IRepository {
         connection.addPreparedStatement("getAltPlayer", "SELECT playername, uuid FROM "+ ConfigManager.main.Table_Players +" WHERE ipaddress = ? ORDER BY lastonline DESC LIMIT 2");
         connection.addPreparedStatement("matchPlayers", "SELECT playername,uuid FROM "+ ConfigManager.main.Table_Players +" WHERE playername like ? OR uuid like ? ORDER BY lastonline LIMIT 20");
         connection.addPreparedStatement("insertPlayer", "INSERT INTO "+ ConfigManager.main.Table_Players +" (playername,uuid,firstonline,lastonline,ipaddress) VALUES (?, ?, NOW(), NOW(), ?)");
-        connection.addPreparedStatement("insertPlayerConvert", "INSERT INTO "+ ConfigManager.main.Table_Players +" (playername,uuid,lastonline,ipaddress,tps) VALUES (?, ?, ?, ?, ?)");
+        connection.addPreparedStatement("insertPlayerConvert", "INSERT INTO "+ ConfigManager.main.Table_Players +" (playername,uuid,firstonline,lastonline,ipaddress,tps) VALUES (?, ?, ?, ?, ?, ?)");
         connection.addPreparedStatement("getPlayers", "SELECT * FROM "+ ConfigManager.main.Table_Players);
         connection.addPreparedStatement("setUUID", "UPDATE "+ ConfigManager.main.Table_Players +" SET uuid = ? WHERE playername = ?");
         connection.addPreparedStatement("updatePlayer", "UPDATE "+ ConfigManager.main.Table_Players +" SET uuid = ?, playername = ?, lastonline = NOW(), ipaddress = ?, tps = ?, newspawn = ? WHERE playername = ? OR uuid = ?");

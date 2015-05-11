@@ -39,7 +39,7 @@ public class GSPlayer
 
     public GSPlayer(String name, String uuid, boolean tps, String ip)
     {
-        this(name, uuid, tps, false, ip, null, null);
+        this(name, uuid, tps, false, ip, new Timestamp(new Date().getTime()), new Timestamp(new Date().getTime()));
     }
     
     public GSPlayer(String name, String uuid, boolean tps, boolean newspawn, String ip, Timestamp lastOnline, Timestamp firstOnline)
@@ -193,12 +193,22 @@ public class GSPlayer
     {
         return lastOnline;
     }
-    
+
+    public void setLastOnline(Timestamp value)
+    {
+        lastOnline = value;
+    }
+
     public Timestamp getFirstOnline()
     {
         return firstOnline;
     }
-    
+
+    public void setFirstOnline(Timestamp value)
+    {
+        firstOnline = value;
+    }
+
     /**
      * Is this player a new player (as in the first time they have ever joined the proxy)
      */
