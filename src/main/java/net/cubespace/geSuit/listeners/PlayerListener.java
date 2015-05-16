@@ -166,7 +166,10 @@ public class PlayerListener implements Listener {
         } else {
             if (!PlayerManager.kickedPlayers.contains(e.getPlayer())) {
                 if (ConfigManager.main.BroadcastProxyConnectionMessages) {
-                    PlayerManager.sendBroadcast(ConfigManager.messages.PLAYER_DISCONNECT_PROXY.replace("{player}", p.getName()));
+                    // Only show disconnect message if player was already successfully connected
+                    if (PlayerManager.getPlayer(e.getPlayer().getName()) != null) {
+                        PlayerManager.sendBroadcast(ConfigManager.messages.PLAYER_DISCONNECT_PROXY.replace("{player}", p.getName()));
+                    }
                 }
             } else {
                 PlayerManager.kickedPlayers.remove(e.getPlayer());
