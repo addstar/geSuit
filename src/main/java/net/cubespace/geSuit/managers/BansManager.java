@@ -281,7 +281,7 @@ public class BansManager {
     	tempBanPlayer(bannedBy, player, seconds, message, false);
     }
 
-    public static void tempBanPlayer(String bannedBy, String player, int seconds, String message, Boolean auto) {
+    public static void tempBanPlayer(String bannedBy, String player, long seconds, String message, Boolean auto) {
         GSPlayer s = PlayerManager.getPlayer(bannedBy);
         CommandSender sender = (s == null ? ProxyServer.getInstance().getConsole() : s.getProxiedPlayer());
 
@@ -304,16 +304,16 @@ public class BansManager {
             message = ConfigManager.messages.DEFAULT_BAN_REASON;
         }
 
-        Date sqlToday = new Date(System.currentTimeMillis() + (seconds * 1000));
+        Date sqlToday = new Date(System.currentTimeMillis() + (seconds * 1000L));
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("dd MMM yyyy HH:mm:ss");
         String time = sdf.format(sqlToday);
         sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
-        String timeDiff = Utilities.buildTimeDiffString(seconds * 1000, 2);
-        String shortTimeDiff = Utilities.buildShortTimeDiffString(seconds * 1000, 10);
+        String timeDiff = Utilities.buildTimeDiffString(seconds * 1000L, 2);
+        String shortTimeDiff = Utilities.buildShortTimeDiffString(seconds * 1000L, 10);
 
         DatabaseManager.bans.tempBanPlayer(t.name, t.uuid, bannedBy, message, sdf.format(sqlToday));
-        callEvent(new BanPlayerEvent(new Ban(-1, t.name, t.uuid, null, bannedBy, message, "tempban", 1, null, new Timestamp(System.currentTimeMillis() + (seconds * 1000))), auto));
+        callEvent(new BanPlayerEvent(new Ban(-1, t.name, t.uuid, null, bannedBy, message, "tempban", 1, null, new Timestamp(System.currentTimeMillis() + (seconds * 1000L))), auto));
 
         if ((t.gsp != null) && (t.gsp.getProxiedPlayer() != null)) {
             disconnectPlayer(t.gsp.getProxiedPlayer(), ConfigManager.messages.TEMP_BAN_MESSAGE.replace("{sender}", t.dispname).replace("{time}", time).replace("{left}", timeDiff).replace("{shortleft}", shortTimeDiff).replace("{message}", message));
