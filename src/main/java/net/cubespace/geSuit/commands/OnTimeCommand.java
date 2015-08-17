@@ -21,14 +21,20 @@ public class OnTimeCommand extends Command {
         if (args.length == 0) {
             PlayerManager.sendMessageToTarget(sender, ConfigManager.messages.BUNGEE_COMMAND_ONTIME_USAGE);
             return;
-        } if (args[0].equalsIgnoreCase("top")) {
-            String page = "1";
+        }
+        if (args[0].equalsIgnoreCase("top")) {
+            int page = 1;
             if (args.length == 2) {
-                page = args[1];
+                try {
+                    page = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    PlayerManager.sendMessageToTarget(sender, "You specified an invalid page number.");
+                    return;
+                }
+                BansManager.displayOnTimeTop(sender.getName(), page);
+            } else {
+                BansManager.displayPlayerOnTime(sender.getName(), args[0]);
             }
-            BansManager.displayOnTimeTop(sender.getName(), page);
-        } else {
-            BansManager.displayPlayerOnTime(sender.getName(), args[0]);
         }
     }
 }

@@ -140,4 +140,8 @@ public class Messages extends Config {
     public String ONTIME_TIME_YEAR = "&6This year:&f {diff}";
     public String ONTIME_TIME_TOTAL = "&6Total ontime:&f {diff}";
     public String ONTIME_TIME_TOP = "&e{num}: &b{time}&a {player}";
+
+    //LastLogin messages
+    public String BUNGEE_COMMAND_LASTLOGINS_USAGE = "&c" + "Usage: !lastlogins <player> <num>";
+    public String LASTLOGINS_FORMAT = "&6 Date:&f{date} &6Ontime:&f{ontime}";
 }
