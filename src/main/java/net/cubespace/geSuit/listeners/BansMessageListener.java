@@ -88,7 +88,11 @@ public class BansMessageListener implements Listener {
             return;
         }
         if (task.equals("DisplayOnTimeTop")) {
-            BansManager.displayOnTimeTop(in.readUTF(), in.readUTF());
+            BansManager.displayOnTimeTop(in.readUTF(), in.readInt());
+            return;
+        }
+        if(task.equals("DisplayLastLogins")){
+            BansManager.displayLastLogins(in.readUTF(), in.readUTF(), in.readInt());
             return;
         }
         if (task.equals("ReloadBans")) {

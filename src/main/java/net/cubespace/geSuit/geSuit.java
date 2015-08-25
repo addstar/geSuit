@@ -1,17 +1,6 @@
 package net.cubespace.geSuit;
 
-import net.cubespace.geSuit.commands.BanCommand;
-import net.cubespace.geSuit.commands.DebugCommand;
-import net.cubespace.geSuit.commands.MOTDCommand;
-import net.cubespace.geSuit.commands.NamesCommand;
-import net.cubespace.geSuit.commands.OnTimeCommand;
-import net.cubespace.geSuit.commands.ReloadCommand;
-import net.cubespace.geSuit.commands.SeenCommand;
-import net.cubespace.geSuit.commands.TempBanCommand;
-import net.cubespace.geSuit.commands.UnbanCommand;
-import net.cubespace.geSuit.commands.WarnCommand;
-import net.cubespace.geSuit.commands.WarnHistoryCommand;
-import net.cubespace.geSuit.commands.WhereCommand;
+import net.cubespace.geSuit.commands.*;
 import net.cubespace.geSuit.database.ConnectionHandler;
 import net.cubespace.geSuit.database.convert.Converter;
 import net.cubespace.geSuit.listeners.APIMessageListener;
@@ -80,6 +69,7 @@ public class geSuit extends Plugin
         proxy.getPluginManager().registerCommand(this, new NamesCommand());
         if (ConfigManager.bans.TrackOnTime) {
         	proxy.getPluginManager().registerCommand(this, new OnTimeCommand());
+            proxy.getPluginManager().registerCommand(this, new LastLoginsCommand());
         }
     }
 
