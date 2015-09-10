@@ -49,8 +49,8 @@ public class Messages extends Config {
     public String TPAHERE_REQUEST_TIMED_OUT = "&c" + "Your request to have {player} teleport to you has timed out";
     public String NO_BACK_TP = "&c" + "You do not have anywhere to go back to";
     public String SENT_BACK = "&6" + "You have been sent back";
-    public String TELEPORT_TOGGLE_ON = "&6" + "Telports have been toggled on";
-    public String TELEPORT_TOGGLE_OFF = "&c" + "Telports have been toggled off";
+    public String TELEPORT_TOGGLE_ON = "&6" + "Teleports have been toggled on";
+    public String TELEPORT_TOGGLE_OFF = "&c" + "Teleports have been toggled off";
     public String TELEPORT_UNABLE = "&c" + "You are unable to teleport to this player";
 
     // warp specific messages
@@ -112,9 +112,10 @@ public class Messages extends Config {
 
     // Home messages
     public String SENT_HOME = "&6" + "You have been sent home";
-    public String NO_HOMES_ALLOWED_SERVER = "&c" + "Your are not allowed to set anymore homes on this server.";
-    public String NO_HOMES_ALLOWED_GLOBAL = "&c" + "Your are not allowed to set anymore homes globally.";
+    public String NO_HOMES_ALLOWED_SERVER = "&c" + "You are not allowed to set any more homes on this server.";
+    public String NO_HOMES_ALLOWED_GLOBAL = "&c" + "You are not allowed to set any more homes globally.";
     public String NO_HOMES = "&c" + "You do not have any homes set.";
+    public String HOME_EXISTS_OTHER_SERVER = "&c" + "Home already exists on another server. Please delete it first.";
     public String SHOWING_YOUR_HOMES = "&eListing your homes:";
     public String SHOWING_OTHER_HOMES = "&eListing homes of {player}:";
     public String HOMES_PREFIX_THIS_SERVER = "&a{server}: &9";

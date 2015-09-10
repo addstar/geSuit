@@ -37,10 +37,13 @@ public class HomesManager {
             PlayerManager.sendMessageToTarget(player, ConfigManager.messages.HOME_SET.replace("{home}", home));
         } else {
             Home home1 = getHome(player, home);
-            home1.setLoc(loc);
-            DatabaseManager.homes.updateHome(home1);
-
-            PlayerManager.sendMessageToTarget(player, ConfigManager.messages.HOME_UPDATED.replace("{home}", home));
+            if (home1.loc.getServer().getName().equals(loc.getServer().getName())) {
+	            home1.setLoc(loc);
+	            DatabaseManager.homes.updateHome(home1);
+	            PlayerManager.sendMessageToTarget(player, ConfigManager.messages.HOME_UPDATED.replace("{home}", home));
+            } else {
+	            PlayerManager.sendMessageToTarget(player, ConfigManager.messages.HOME_EXISTS_OTHER_SERVER.replace("{home}", home));
+            }
         }
     }
 
