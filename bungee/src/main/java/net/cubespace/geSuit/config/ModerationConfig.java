@@ -24,6 +24,12 @@ public class ModerationConfig extends Config {
     public Boolean TrackOnTime = true;
     public int NameChangeNotifyTime = 20;
 
+    public String LockdownTime = "5m";
+    @Comment("if set to true the server will start lockedDown and will release in 5minutes")
+    public boolean LockedDown = false;
+    @Comment("if set and no message is set when the lockdown is started this will be used")
+    public String LockDownStartupMsg = "";
+
     public int WarningExpiryDays = 180;
     
     public String DefaultBanReason = "Unknown";
