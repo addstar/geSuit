@@ -7,7 +7,11 @@ import net.cubespace.geSuit.managers.LoggingManager;
 import net.cubespace.geSuit.profile.Profile;
 import net.cubespace.geSuit.tasks.DatabaseUpdateRowUUID;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -183,9 +187,15 @@ public class Utilities {
     public static boolean doBungeeChatMirror(String channel, String msg) {
 		LoggingManager.log(ChatColor.translateAlternateColorCodes('&', msg));
 
-		// If BungeeChat integration is disabled, just log the message and exit
-		if (!ConfigManager.main.BungeeChatIntegration)
+		// If BungeeChat integration is disabled, just log the message and send to players with bungeecord permission gesuit.admin
+		if (!ConfigManager.main.BungeeChatIntegration) {
+			for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+				if(player.hasPermission("gesuit.admin")) {
+					player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', msg)).create());
+				}
+			}
 			return true;
+		}
 
 		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(ostream);
