@@ -225,7 +225,7 @@ public class TeleportManager {
         }
 
         if (!bypass) {
-            if (!playerIsAcceptingTeleports(p) || !playerIsAcceptingTeleports(t)) {
+            if (!playerIsAcceptingTeleports(t)) {
                 s.sendMessage(ConfigManager.messages.TELEPORT_UNABLE);
                 return;
             }
