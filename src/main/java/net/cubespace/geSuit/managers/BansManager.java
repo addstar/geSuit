@@ -214,7 +214,7 @@ public class BansManager {
         CommandSender sender = (s == null ? ProxyServer.getInstance().getConsole() : s.getProxiedPlayer());
 
         BanTarget t = getBanTarget(player);
-        List<Ban> bans = DatabaseManager.bans.getBanHistory(t.name);
+        List<Ban> bans = DatabaseManager.bans.getBanHistory(t.name, t.uuid);
 
         if (bans == null || bans.isEmpty()) {
             PlayerManager.sendMessageToTarget(sender, Utilities.colorize(ConfigManager.messages.PLAYER_NEVER_BANNED.replace("{player}", t.dispname)));

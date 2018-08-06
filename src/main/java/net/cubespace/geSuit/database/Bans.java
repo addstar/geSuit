@@ -136,14 +136,14 @@ public class Bans implements IRepository {
         }
     }
 
-    public List<Ban> getBanHistory(String lookup) {
+    public List<Ban> getBanHistory(String lookup, String uuid) {
         List<Ban> bans = new ArrayList<>();
 
         ConnectionHandler connectionHandler = DatabaseManager.connectionPool.getConnection();
         try {
             PreparedStatement banInfo = connectionHandler.getPreparedStatement("banHistory");
             banInfo.setString(1, lookup);
-            banInfo.setString(2, lookup);
+            banInfo.setString(2, uuid);
             banInfo.setString(3, lookup);
 
             ResultSet res = banInfo.executeQuery();
