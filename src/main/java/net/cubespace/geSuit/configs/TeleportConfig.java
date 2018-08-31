@@ -12,6 +12,8 @@ public class TeleportConfig extends YamlConfig {
     }
 
     public Integer TeleportRequestExpireTime = 10;
+    
+    public Boolean SenderNeedsEnabledTpToggle = true;
 
     public ArrayList<String> TPAWhitelist = new ArrayList<>();
 }

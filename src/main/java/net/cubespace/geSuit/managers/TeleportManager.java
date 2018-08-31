@@ -16,6 +16,7 @@ public class TeleportManager {
     public static HashMap<GSPlayer, GSPlayer> pendingTeleportsTPA = new HashMap<>(); // Player ----teleported---> player
     public static HashMap<GSPlayer, GSPlayer> pendingTeleportsTPAHere = new HashMap<>(); // Player ----teleported---> player
     private static int expireTime = ConfigManager.teleport.TeleportRequestExpireTime;
+    private static boolean needsTptoggle = ConfigManager.teleport.SenderNeedsEnabledTpToggle;
 
     public static void requestToTeleportToPlayer(String player, String target) {
         final GSPlayer bp = PlayerManager.getPlayer(player);
@@ -165,6 +166,11 @@ public class TeleportManager {
     }
 
     public static void sendPlayerToLastBack(GSPlayer player, boolean death, boolean teleport) {
+    	if (player == null) {
+    		LoggingManager.log("WARNING: sendPlayerToLastBack(GSPlayer, boolean, boolean) : player is null");
+            new Exception("").printStackTrace();
+            return;
+    	}
         if (player.hasDeathBackLocation() || player.hasTeleportBackLocation()) {
             PlayerManager.sendMessageToTarget(player, ConfigManager.messages.SENT_BACK);
         } else {
@@ -219,7 +225,11 @@ public class TeleportManager {
         }
 
         if (!bypass) {
-            if (!playerIsAcceptingTeleports(p) || !playerIsAcceptingTeleports(t)) {
+<<<<<<< HEAD
+            if (!(!needsTptoggle || playerIsAcceptingTeleports(p)) || !playerIsAcceptingTeleports(t)) {
+=======
+            if (!playerIsAcceptingTeleports(t)) {
+>>>>>>> 56721cb0fe4cdfb25b1e6b8fcdad2832fc5a6363
                 s.sendMessage(ConfigManager.messages.TELEPORT_UNABLE);
                 return;
             }

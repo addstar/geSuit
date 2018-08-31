@@ -18,6 +18,12 @@ public class TeleportToLocation
 {
     public static void execute(GSPlayer player, Location location)
     {
+        if (location == null) {
+            geSuit.instance.getLogger().severe("Location is null, this should never happen. Please check");
+            new Exception("").printStackTrace();
+            return;
+        }
+        
         if (location.getServer() == null) {
             geSuit.getInstance().getLogger().severe("Location has no Server, this should never happen. Please check");
             new Exception("").printStackTrace();
