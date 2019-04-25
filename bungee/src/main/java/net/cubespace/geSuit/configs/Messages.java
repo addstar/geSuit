@@ -172,4 +172,7 @@ public class Messages extends YamlConfig {
     //Lockdown messages
     public String LOCKDOWN_MESSAGE = "&c" + "Server is in maintenance. {message}";
     public String LOCKDOWN_USAGE = "&c" + "Usage: !lockdown end|status|<time> <msg>  (time format like 1h5m10s)";
+
+    //Client Version Message
+    public String VERSION_TOO_LOW = "&c" + "Your client version is too low for this server please use atleast: {version}";
 }

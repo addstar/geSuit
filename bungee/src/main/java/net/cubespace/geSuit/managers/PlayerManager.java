@@ -45,9 +45,12 @@ public class PlayerManager {
         return DatabaseManager.players.playerExists(Utilities.getStringFromUUID(player));
     }
 
+    private static boolean clientVersionOk(PendingConnection connection) {
+        return connection.getVersion() > ConfigManager.main.minClientProtocol;
+    }
+
     public static void initPlayer(final PendingConnection connection, final LoginEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(geSuit.getInstance(), () -> {
-    
             boolean playerExists = playerExists(connection.getUniqueId());
             //lockdown check
             if (!playerExists) {//check player is new first
@@ -98,6 +101,7 @@ public class PlayerManager {
             // Load the GSPlayer object for use
             GSPlayer gsPlayer;
             if (playerExists) {
+
                 gsPlayer = getPlayer(connection.getName());
                 if (gsPlayer == null) {
                     gsPlayer = DatabaseManager.players.loadPlayer(Utilities.getStringFromUUID(connection.getUniqueId()));
@@ -107,11 +111,17 @@ public class PlayerManager {
                 } else {
                     LoggingManager.log(ConfigManager.messages.PLAYER_LOAD_CACHED.replace("{player}", gsPlayer.getName()).replace("{uuid}", connection.getUniqueId().toString()));
                 }
+
             } else {
                 gsPlayer = new GSPlayer(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), true);
                 gsPlayer.setFirstJoin(true);
             }
-
+            if (!clientVersionOk(connection)) {
+                event.setCancelled(true);
+                event.setCancelReason(TextComponent.fromLegacyText(ConfigManager.messages.VERSION_TOO_LOW.replace("{version}", ConfigManager.main.minClientVersion)));
+                event.completeIntent(geSuit.getInstance());
+                return;
+            }
             gsPlayer.setIp(connection.getAddress().getHostString());
 
             Track history = DatabaseManager.tracking.checkNameChange(connection.getUniqueId(), connection.getName());

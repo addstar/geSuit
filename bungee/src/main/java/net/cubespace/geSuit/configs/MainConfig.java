@@ -51,6 +51,10 @@ public class MainConfig extends YamlConfig {
     public Integer PlayerDisconnectDelay = 0;
     @Comment("This should be true on offline Mode Server since they can't use UUIDs provided by Mojang")
     public Boolean OverwriteUUID = false;
+    @Comment("The minimum version allowed to join the server - players less than this version will be disallowed and recieve a message.")
+    public String minClientVersion = "1.8";
+    @Comment("The minimum protocol - use wiki.vg - allowed to join the server")
+    public Integer minClientProtocol = 47;
 
     @Comment("Legacy channel handling...channels names prior to 1.13 were not namespaced...enabling this will support legacy and namespaced names.")
     public Boolean enableLegacy = false;
