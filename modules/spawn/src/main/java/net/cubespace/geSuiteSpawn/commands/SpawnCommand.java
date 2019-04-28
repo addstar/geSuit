@@ -60,20 +60,17 @@ public class SpawnCommand extends CommandManager<SpawnManager> {
             final Location lastLocation = player.getLocation();
 
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Teleportation will commence in &c3 seconds&6. Don't move."));
-            Bukkit.getServer().getScheduler().runTaskLater(instance, new Runnable() {
-                @Override
-                public void run() {
-                	if (player.isOnline()) {
-                		if ((lastLocation == null) || (lastLocation.getBlock() == null))
-                			return;
-                		
-	                    if (lastLocation.getBlock().equals(player.getLocation().getBlock())) {
-	                        player.sendMessage(ChatColor.GOLD + "Teleportation commencing...");
-                            manager.sendPlayerToSpawn(player);
-	                    } else {
-	                        player.sendMessage(ChatColor.RED + "Teleportation aborted because you moved.");
-	                    }
-                	}
+            Bukkit.getServer().getScheduler().runTaskLater(instance, () -> {
+                if (player.isOnline()) {
+                    if ((lastLocation == null) || (lastLocation.getBlock() == null))
+                        return;
+
+                    if (lastLocation.getBlock().equals(player.getLocation().getBlock())) {
+                        player.sendMessage(ChatColor.GOLD + "Teleportation commencing...");
+                        manager.sendPlayerToSpawn(player);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "Teleportation aborted because you moved.");
+                    }
                 }
             }, 60L);
             return true;

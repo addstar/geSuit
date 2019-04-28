@@ -12,7 +12,9 @@ public class Announcements extends YamlConfig {
         CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "announcements.yml");
     }
 
+    @SuppressWarnings("CanBeFinal")
     public Boolean Enabled = true;
+    @SuppressWarnings("CanBeFinal")
     public HashMap<String, AnnouncementEntry> Announcements = new HashMap<>();
 }
 

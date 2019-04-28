@@ -6,10 +6,10 @@ import org.bukkit.block.Block;
 
 public class Loc {
 
-    String world;
-    double x;
-    double y;
-    double z;
+    final String world;
+    final double x;
+    final double y;
+    final double z;
 
 
     public Loc(String world, double x, double y, double z) {

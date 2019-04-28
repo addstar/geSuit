@@ -43,7 +43,7 @@ public class PortalsMessageListener implements PluginMessageListener {
 
                     }
                     if (name != null) {
-                        Player p = Bukkit.getPlayer(name);
+                        @SuppressWarnings("deprecation") Player p = Bukkit.getPlayer(name);
                         p.sendMessage(ChatColor.RED + "Portals - " + ChatColor.GOLD + instance.getDescription().getVersion());
                     }
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Portals - " + ChatColor.GOLD + instance.getDescription().getVersion());

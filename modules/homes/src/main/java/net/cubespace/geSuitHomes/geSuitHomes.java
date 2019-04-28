@@ -10,7 +10,7 @@ import net.cubespace.geSuitHomes.managers.HomesManager;
 
 public class geSuitHomes extends BukkitModule {
 
-	private HomesManager manager;
+    private final HomesManager manager;
 
 	public geSuitHomes() {
 		super("homes",true);

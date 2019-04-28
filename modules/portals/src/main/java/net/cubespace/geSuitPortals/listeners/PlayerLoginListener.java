@@ -23,16 +23,12 @@ public class PlayerLoginListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void playerConnect(PlayerJoinEvent e) {
         if (!PortalsManager.RECEIVED) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, new Runnable() {
-
-                @Override
-                public void run() {
-                    if (!PortalsManager.RECEIVED) {
-                        PortalsManager.RECEIVED = true;
-                        manager.requestPortals();
-                    }
-
+            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, () -> {
+                if (!PortalsManager.RECEIVED) {
+                    PortalsManager.RECEIVED = true;
+                    manager.requestPortals();
                 }
+
             }, 10L);
         }
         if (PortalsManager.pendingTeleports.containsKey(e.getPlayer().getName())) {

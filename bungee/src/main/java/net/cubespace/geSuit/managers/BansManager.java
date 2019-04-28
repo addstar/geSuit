@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BansManager {
 
-    private static List<Kick> kicks = new ArrayList<>();
+    private static final List<Kick> kicks = new ArrayList<>();
 
     public static void banPlayer(String bannedBy, String player, String reason) {
     	banPlayer(bannedBy, player, reason, false);
@@ -530,7 +530,7 @@ public class BansManager {
             List<String> sortedNames = new ArrayList<>(uuidNameMap.values());
 
             // Show warnings for each player, sorting alphabetically by name
-            Collections.sort(sortedNames, String.CASE_INSENSITIVE_ORDER);
+            sortedNames.sort(String.CASE_INSENSITIVE_ORDER);
             for (String playerName : sortedNames) {
                 displayPlayerWarnBanHistory(sender, playerName);
             }
@@ -807,12 +807,7 @@ public class BansManager {
                 String currentUuid = t.getUuid();
 
                 uuidNameMap.put(currentUuid, t.getPlayer());
-                Integer count = uuidNameCount.get(currentUuid);
-                if (count == null) {
-                    uuidNameCount.put(currentUuid, 1);
-                } else {
-                    uuidNameCount.put(currentUuid, count + 1);
-                }
+                uuidNameCount.merge(currentUuid, 1, Integer::sum);
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -987,7 +982,7 @@ public class BansManager {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             for (Track t : names) {
 
-                String builder = String.valueOf(ChatColor.DARK_GREEN) +
+                String builder = ChatColor.DARK_GREEN +
                         " - " +
                         t.getPlayer() +
                         ' ' +

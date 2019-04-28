@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class AdminListener implements PluginMessageListener, Listener{
 
-    private geSuitAdmin instance;
+    private final geSuitAdmin instance;
 
     public AdminListener(geSuitAdmin instance) {
         this.instance = instance;

@@ -17,11 +17,11 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class ConnectionPool {
-    private HikariConfig dbConfig = new HikariConfig();
+    private final HikariConfig dbConfig = new HikariConfig();
     private HikariDataSource dataSource;
     private boolean configured = false;
-    private Map<String, String> statementCache = new HashMap<>();
-    private ArrayList<IRepository> repositories = new ArrayList<>();
+    private final Map<String, String> statementCache = new HashMap<>();
+    private final ArrayList<IRepository> repositories = new ArrayList<>();
 
     public void addRepository(IRepository repository) {
         repositories.add(repository);

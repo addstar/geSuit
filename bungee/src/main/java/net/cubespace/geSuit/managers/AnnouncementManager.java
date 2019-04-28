@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class AnnouncementManager {
-    public static ArrayList<ScheduledTask> announcementTasks = new ArrayList<>();
-    static ProxyServer proxy = ProxyServer.getInstance();
+    public static final ArrayList<ScheduledTask> announcementTasks = new ArrayList<>();
+    static final ProxyServer proxy = ProxyServer.getInstance();
 
     public static void loadAnnouncements() {
         // create defaults

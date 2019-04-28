@@ -91,6 +91,7 @@ public class TeleportsManager extends DataManager {
         if (sender instanceof Player) {
             player = (Player) sender;
         } else {
+            //noinspection deprecation
             player = Bukkit.getPlayer(sender.getName());
         }
 
@@ -211,6 +212,7 @@ public class TeleportsManager extends DataManager {
         instance.sendMessage(b);
     }
 
+    @SuppressWarnings("deprecation")
     public void sendPlayerBack(final CommandSender sender) {
         final Player player;
         if (sender instanceof Player) {
@@ -270,6 +272,7 @@ public class TeleportsManager extends DataManager {
         instance.sendMessage(b);
     }
 
+    @SuppressWarnings("deprecation")
     public void teleportPlayerToPlayer(final String player, String target) {
         Player p = Bukkit.getPlayer( player );
         Player t = Bukkit.getPlayer( target );
@@ -295,6 +298,7 @@ public class TeleportsManager extends DataManager {
             w = Bukkit.getWorlds().get(0);
             t = w.getSpawnLocation();
         }
+        //noinspection deprecation
         Player p = Bukkit.getPlayer( player );
         if ( p != null ) {
             //Check if Block is safe
@@ -315,13 +319,12 @@ public class TeleportsManager extends DataManager {
         } else {
             pendingTeleportLocations.put( player, t );
             //clear pending teleport if they dont connect
-            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, () -> {
-                pendingTeleportLocations.remove(player);
-            }, 100L);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, () -> pendingTeleportLocations.remove(player), 100L);
         }
     }
 
     public void teleportToPlayer(final CommandSender sender, final String playerName, final String target) {
+        //noinspection deprecation
         final Player player = Bukkit.getPlayer(sender.getName());
 
         if (!player.hasPermission("gesuit.teleports.bypass.delay")) {

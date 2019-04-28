@@ -28,7 +28,7 @@ public class TPPosCommand extends CommandManager<TeleportsManager> {
                 return false;
             }
 
-            Player p = Bukkit.getPlayer(args[0]);
+            @SuppressWarnings("deprecation") Player p = Bukkit.getPlayer(args[0]);
             if (p == null) {
                 sender.sendMessage(geSuitTeleports.invalid_offline + args[0]);
                 return true;
@@ -149,7 +149,7 @@ public class TPPosCommand extends CommandManager<TeleportsManager> {
             return false;
         }
 
-        Player p = Bukkit.getPlayer(sender.getName());
+        @SuppressWarnings("deprecation") Player p = Bukkit.getPlayer(sender.getName());
 
         // tppos X Y Z
         if ( args.length == 3 ) {
@@ -171,7 +171,7 @@ public class TPPosCommand extends CommandManager<TeleportsManager> {
             return true;
         }
 
-        Player p2 = Bukkit.getPlayer(args[0]);
+        @SuppressWarnings("deprecation") Player p2 = Bukkit.getPlayer(args[0]);
 
         if ( p2 != null && !p.hasPermission("gesuit.teleports.tp.others")) {
             p.sendMessage(geSuitTeleports.no_perms_for_teleporting_others);

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("CanBeFinal")
 public class BansConfig extends YamlConfig {
     public BansConfig() {
         CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "bans.yml");
@@ -35,6 +36,6 @@ public class BansConfig extends YamlConfig {
     public List<String> KickReasonIgnoreList = new ArrayList<>(Collections.singletonList("AutoKick: Anti-AFK"));
 
     public HashMap<Integer, String> Actions = new HashMap<>();
-    
+
     public GeoIPSettings GeoIP = new GeoIPSettings();
 }

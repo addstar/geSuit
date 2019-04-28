@@ -10,7 +10,7 @@ import java.util.Date;
 public class Kick {
 
     private String uuid;
-    private String name;
+    private final String name;
     private String bannedBy;
     private String reason;
     private long bannedOn;

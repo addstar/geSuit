@@ -17,8 +17,9 @@ public class TPCommand extends CommandManager<TeleportsManager> {
         super(manager);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args ) {
 
         if ( !( sender instanceof Player ) ) {
 

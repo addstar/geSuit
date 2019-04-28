@@ -15,14 +15,14 @@ public class GSPlayer
 {
 
     private String playername;
-    private String uuid;
+    private final String uuid;
     private boolean acceptingTeleports;
     private String server = null;
     private String ip;
     private Timestamp lastOnline;
     private Timestamp firstOnline;
 
-    private HashMap<String, ArrayList<Home>> homes = new HashMap<>();
+    private final HashMap<String, ArrayList<Home>> homes = new HashMap<>();
     private Track previousName;
     private Location deathBackLocation;
     private Location teleportBackLocation;

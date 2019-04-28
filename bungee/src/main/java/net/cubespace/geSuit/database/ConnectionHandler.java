@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
 public class ConnectionHandler {
-    private Connection connection;
+    private final Connection connection;
     private boolean used;
     private long lastUsed;
-    private LinkedHashMap<String, PreparedStatement> preparedStatements = new LinkedHashMap<>();
+    private final LinkedHashMap<String, PreparedStatement> preparedStatements = new LinkedHashMap<>();
 
     public ConnectionHandler(Connection connection) {
         this.connection = connection;

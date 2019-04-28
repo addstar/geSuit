@@ -10,8 +10,8 @@ import org.bukkit.command.CommandExecutor;
  */
 public abstract class CommandManager<T extends DataManager> implements CommandExecutor {
 
-    protected T manager;
-    protected BukkitModule instance;
+    protected final T manager;
+    protected final BukkitModule instance;
 
     public CommandManager(T manager, BukkitModule mod) {
         this.manager = manager;

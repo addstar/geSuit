@@ -23,7 +23,7 @@ public class TPAcceptCommand extends CommandManager<TeleportsManager> {
 			sender.sendMessage(ChatColor.RED + "Must be in game to use this command");
 			return false;
 		}
-		Player p  = Bukkit.getPlayer(sender.getName());
+        @SuppressWarnings("deprecation") Player p = Bukkit.getPlayer(sender.getName());
 		p.saveData();
 		if (manager.getUtil().worldGuardTpAllowed(p.getLocation(), p) || sender.hasPermission("worldguard.teleports.allregions") || sender.hasPermission("worldgaurd.teleports.allregions"))
 			manager.tpAccept(sender);

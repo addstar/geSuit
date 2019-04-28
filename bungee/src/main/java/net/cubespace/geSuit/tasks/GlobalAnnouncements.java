@@ -11,7 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class GlobalAnnouncements implements Runnable
 {
 
-    private ArrayList<String> list = new ArrayList<>();
+    private final ArrayList<String> list = new ArrayList<>();
     private int count = 0;
 
     public void addAnnouncement(String message)

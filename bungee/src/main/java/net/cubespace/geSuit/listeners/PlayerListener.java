@@ -1,5 +1,7 @@
 package net.cubespace.geSuit.listeners;
 
+import au.com.addstar.dripreporter.DripMeter;
+
 import net.cubespace.geSuit.Utilities;
 import net.cubespace.geSuit.geSuit;
 import net.cubespace.geSuit.managers.*;
@@ -18,11 +20,18 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerListener implements Listener {
+    private static DripMeter blockedLogins;
 
+    static {
+        if (geSuit.isMonitored()) {
+            blockedLogins = geSuit.getMonitor().addMeter(PlayerListener.class, "blockedLogins");
+        }
+    }
     @EventHandler(priority = EventPriority.LOW)
     public void playerLogin(LoginEvent event) {
         event.registerIntent(geSuit.getInstance());
         PlayerManager.initPlayer(event.getConnection(), event);
+        if (event.isCancelled()) blockedLogins.mark();
     }
     
 	@EventHandler(priority = EventPriority.LOW)

@@ -37,10 +37,12 @@ public class TeleportsMessageListener implements PluginMessageListener {
             }
             
             if ( task.equals( "TeleportAccept" ) ) {
+                //noinspection deprecation
                 manager.finishTPA(Bukkit.getPlayerExact(in.readUTF()), in.readUTF());
             }
             
             if ( task.equals( "LeavingServer" ) ) {
+                //noinspection deprecation
                 manager.doLeaveServer(Bukkit.getPlayerExact(in.readUTF()));
             }
 
@@ -56,6 +58,7 @@ public class TeleportsMessageListener implements PluginMessageListener {
 
             }
             if ( name != null ) {
+                //noinspection deprecation
                 Player p = Bukkit.getPlayer( name );
                 p.sendMessage(ChatColor.RED + "Teleports - " + ChatColor.GOLD + instance.getDescription().getVersion());
             }

@@ -17,8 +17,8 @@ import java.util.logging.Logger;
 public class DatabaseUpdateRowUUID implements Runnable
 {
 
-    int rowID;
-    String playerName;
+    final int rowID;
+    final String playerName;
 
     public DatabaseUpdateRowUUID(int id, String pname)
     {

@@ -24,7 +24,7 @@ public class Location {
     }
 
     public Location(String serialised) {
-        String loc[] = serialised.split("~!~");
+        String[] loc = serialised.split("~!~");
         server = ProxyServer.getInstance().getServerInfo(loc[0]);
         world = loc[1];
         x = Double.parseDouble(loc[2]);

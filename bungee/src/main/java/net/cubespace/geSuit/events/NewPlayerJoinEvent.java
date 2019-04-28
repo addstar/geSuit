@@ -14,8 +14,8 @@ import net.md_5.bungee.api.plugin.Event;
 public class NewPlayerJoinEvent extends Event
 {
 
-    private String message;
-    private String player;
+    private final String message;
+    private final String player;
 
     public NewPlayerJoinEvent(String playerName, String message)
     {

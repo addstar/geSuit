@@ -3,7 +3,6 @@ package net.cubespace.geSuit.profile;
 import com.google.gson.Gson;
 
 import net.cubespace.geSuit.Utilities;
-import net.cubespace.geSuit.managers.LoggingManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;

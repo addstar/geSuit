@@ -6,14 +6,14 @@ import net.md_5.bungee.api.plugin.Event;
 import java.util.UUID;
 
 public class WarnPlayerEvent extends Event {
-    
-    private String player;
-    private UUID id;
-    private String by;
-    private String reason;
-    private ActionType action;
-    private String actionExtra;
-    private int warnCount;
+
+    private final String player;
+    private final UUID id;
+    private final String by;
+    private final String reason;
+    private final ActionType action;
+    private final String actionExtra;
+    private final int warnCount;
     
     public WarnPlayerEvent(String player, String uuid, String by, String reason, ActionType type, String actionExtra, int count) {
         this.player = player;

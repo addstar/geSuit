@@ -11,12 +11,10 @@ import net.md_5.bungee.api.plugin.Listener;
  * Created by benjamincharlton on 31/08/2018.
  */
 public abstract class MessageListener implements Listener {
-    private boolean isLegacy = false;
-    private geSuit.CHANNEL_NAMES channelName;
+    private final geSuit.CHANNEL_NAMES channelName;
 
     public MessageListener(boolean legacy, geSuit.CHANNEL_NAMES channel) {
         channelName = channel;
-        isLegacy = legacy;
     }
 
     /**
@@ -28,7 +26,7 @@ public abstract class MessageListener implements Listener {
         if (event.isCancelled()) return false;
         if (!(event.getSender() instanceof Server)) return false;
         if (event.getTag().equalsIgnoreCase(channelName.toString())
-                || (isLegacy && event.getTag().equalsIgnoreCase(channelName.getLegacy()))) {
+                || (event.getTag().equalsIgnoreCase(channelName.getLegacy()))) {
             event.setCancelled(true);
             return true;
         }

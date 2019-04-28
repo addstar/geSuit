@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +32,7 @@ public class Bans implements IRepository {
                 Connection con = DatabaseManager.connectionPool.getConnection();
                 PreparedStatement isPlayerBanned = DatabaseManager.connectionPool.getPreparedStatement(
                         "isPlayerBanned", con)) {
-            isPlayerBanned.setString(1, player);
+            Objects.requireNonNull(isPlayerBanned).setString(1, player);
             isPlayerBanned.setString(2, uuid);
             isPlayerBanned.setString(3, ip);
 
@@ -48,7 +49,7 @@ public class Bans implements IRepository {
                 PreparedStatement banPlayer =
                         DatabaseManager.connectionPool.getPreparedStatement("banPlayer", con, Statement.RETURN_GENERATED_KEYS)
         ) {
-            banPlayer.setString(1, banned_playername);
+            Objects.requireNonNull(banPlayer).setString(1, banned_playername);
             banPlayer.setString(2, banned_uuid);
             banPlayer.setString(3, banned_ip);
             banPlayer.setString(4, bannedBy);
@@ -74,7 +75,7 @@ public class Bans implements IRepository {
                 PreparedStatement banPlayer =
                         DatabaseManager.connectionPool.getPreparedStatement("warnPlayer", con, Statement.RETURN_GENERATED_KEYS)
         ) {
-            banPlayer.setString(1, banned_playername);
+            Objects.requireNonNull(banPlayer).setString(1, banned_playername);
             banPlayer.setString(2, banned_uuid);
             banPlayer.setString(3, bannedBy);
             banPlayer.setString(4, reason);
@@ -98,7 +99,7 @@ public class Bans implements IRepository {
                 PreparedStatement banPlayer =
                         DatabaseManager.connectionPool.getPreparedStatement("kickPlayer", con, Statement.RETURN_GENERATED_KEYS)
         ) {
-            banPlayer.setString(1, banned_playername);
+            Objects.requireNonNull(banPlayer).setString(1, banned_playername);
             banPlayer.setString(2, banned_uuid);
             banPlayer.setString(3, bannedBy);
             banPlayer.setString(4, reason);
@@ -121,7 +122,7 @@ public class Bans implements IRepository {
                 PreparedStatement tempBanPlayer =
                         DatabaseManager.connectionPool.getPreparedStatement("tempBanPlayer", con)
         ) {
-            tempBanPlayer.setString(1, banned_playername);
+            Objects.requireNonNull(tempBanPlayer).setString(1, banned_playername);
             tempBanPlayer.setString(2, banned_uuid);
             tempBanPlayer.setString(3, banned_by);
             tempBanPlayer.setString(4, reason);
@@ -140,7 +141,7 @@ public class Bans implements IRepository {
                 PreparedStatement banInfo =
                         DatabaseManager.connectionPool.getPreparedStatement("banHistory", con)
         ) {
-            banInfo.setString(1, lookup);
+            Objects.requireNonNull(banInfo).setString(1, lookup);
             banInfo.setString(2, lookup);
             banInfo.setString(3, lookup);
 
@@ -164,7 +165,7 @@ public class Bans implements IRepository {
                 PreparedStatement banInfo =
                         DatabaseManager.connectionPool.getPreparedStatement("warnHistory", con)
         ) {
-            banInfo.setString(1, player);
+            Objects.requireNonNull(banInfo).setString(1, player);
             banInfo.setString(2, uuid);
 
             ResultSet res = banInfo.executeQuery();
@@ -187,7 +188,7 @@ public class Bans implements IRepository {
                 PreparedStatement banInfo =
                         DatabaseManager.connectionPool.getPreparedStatement("kickHistory", con)
         ) {
-            banInfo.setString(1, player);
+            Objects.requireNonNull(banInfo).setString(1, player);
             banInfo.setString(2, uuid);
             ResultSet res = banInfo.executeQuery();
             while (res.next()) {
@@ -208,7 +209,7 @@ public class Bans implements IRepository {
                 PreparedStatement banInfo =
                         DatabaseManager.connectionPool.getPreparedStatement("kickwarnHistory", con)
         ) {
-            banInfo.setString(1, player);
+            Objects.requireNonNull(banInfo).setString(1, player);
             banInfo.setString(2, uuid);
 
             ResultSet res = banInfo.executeQuery();
@@ -236,7 +237,7 @@ public class Bans implements IRepository {
                 PreparedStatement banInfo =
                         DatabaseManager.connectionPool.getPreparedStatement("banInfo", con)
         ) {
-            banInfo.setString(1, player);
+            Objects.requireNonNull(banInfo).setString(1, player);
             banInfo.setString(2, uuid);
             banInfo.setString(3, ip);
 
@@ -259,7 +260,7 @@ public class Bans implements IRepository {
                 PreparedStatement statement =
                         DatabaseManager.connectionPool.getPreparedStatement("unbanPlayer", con)
         ) {
-            statement.setInt(1, id);
+            Objects.requireNonNull(statement).setInt(1, id);
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -272,7 +273,7 @@ public class Bans implements IRepository {
                 PreparedStatement statement =
                         DatabaseManager.connectionPool.getPreparedStatement("insertBanConvert", con)
         ) {
-            statement.setString(1, player); //playerName
+            Objects.requireNonNull(statement).setString(1, player); //playerName
             statement.setString(2, uuid); //UUID
             statement.setString(3, ip); //IP
             statement.setString(4, bannedBy);
@@ -342,7 +343,7 @@ public class Bans implements IRepository {
                     PreparedStatement statement =
                             DatabaseManager.connectionPool.getPreparedStatement("getBans", con)
             ) {
-                ResultSet res = statement.executeQuery();
+                ResultSet res = Objects.requireNonNull(statement).executeQuery();
                 while (res.next()) {
                     String bannedEntity = res.getString("banned_uuid");
 
@@ -357,7 +358,7 @@ public class Bans implements IRepository {
                                             DatabaseManager.connectionPool.getPreparedStatement(
                                                     "updateToUUID", con2)
                             ) {
-                                statement2.setString(1, uuid);
+                                Objects.requireNonNull(statement2).setString(1, uuid);
                                 statement2.setInt(2, res.getInt("id"));
                                 statement2.executeUpdate();
                             } catch (SQLException e) {
@@ -384,9 +385,9 @@ public class Bans implements IRepository {
                     PreparedStatement statement3 = DatabaseManager.connectionPool.getPreparedStatement("updateToVersion3-part3", con)
 
             ) {
-                statement.executeUpdate();
-                statement2.executeUpdate();
-                statement3.executeUpdate();
+                Objects.requireNonNull(statement).executeUpdate();
+                Objects.requireNonNull(statement2).executeUpdate();
+                Objects.requireNonNull(statement3).executeUpdate();
                 System.out.println("Updated Bans to version 3!");
                 updateCompleted = true;
             } catch (SQLException ex) {

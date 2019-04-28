@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * Created by benjamincharlton on 24/09/2018.
  */
 public class LoggingManager {
-    private static Logger logger = Bukkit.getLogger();
+    private static final Logger logger = Bukkit.getLogger();
     private static Level level = Level.INFO;
 
     public static void setLevel(Level l) {

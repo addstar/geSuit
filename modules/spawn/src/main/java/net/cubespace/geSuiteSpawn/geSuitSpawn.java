@@ -18,9 +18,11 @@ import net.cubespace.geSuiteSpawn.managers.SpawnManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Objects;
+
 public class geSuitSpawn extends BukkitModule {
 
-	private SpawnManager manager;
+    private final SpawnManager manager;
 	public geSuitSpawn() {
         super("spawns", true);
 		manager = new SpawnManager(this);
@@ -47,16 +49,16 @@ public class geSuitSpawn extends BukkitModule {
 		return manager;
 	}
     protected void registerCommands() {
-		getCommand("setnewspawn").setExecutor(new SetNewSpawnCommand(manager));
-		getCommand("setworldspawn").setExecutor(new SetWorldSpawnCommand(manager));
-		getCommand("delworldspawn").setExecutor(new DelWorldSpawnCommand(manager));
-		getCommand("setserverspawn").setExecutor(new SetServerSpawnCommand(manager));
-		getCommand("setglobalspawn").setExecutor(new SetGlobalSpawnCommand(manager));
-		getCommand("spawn").setExecutor(new SpawnCommand(manager, this));
-		getCommand("worldspawn").setExecutor(new WorldSpawnCommand(manager, this));
-		getCommand("serverspawn").setExecutor(new ServerSpawnCommand(manager, this));
-		getCommand("globalspawn").setExecutor(new GlobalSpawnCommand(manager, this));
-		getCommand("warpspawn").setExecutor(new WarpSpawnCommand(manager, this));
+        Objects.requireNonNull(getCommand("setnewspawn")).setExecutor(new SetNewSpawnCommand(manager));
+        Objects.requireNonNull(getCommand("setworldspawn")).setExecutor(new SetWorldSpawnCommand(manager));
+        Objects.requireNonNull(getCommand("delworldspawn")).setExecutor(new DelWorldSpawnCommand(manager));
+        Objects.requireNonNull(getCommand("setserverspawn")).setExecutor(new SetServerSpawnCommand(manager));
+        Objects.requireNonNull(getCommand("setglobalspawn")).setExecutor(new SetGlobalSpawnCommand(manager));
+        Objects.requireNonNull(getCommand("spawn")).setExecutor(new SpawnCommand(manager, this));
+        Objects.requireNonNull(getCommand("worldspawn")).setExecutor(new WorldSpawnCommand(manager, this));
+        Objects.requireNonNull(getCommand("serverspawn")).setExecutor(new ServerSpawnCommand(manager, this));
+        Objects.requireNonNull(getCommand("globalspawn")).setExecutor(new GlobalSpawnCommand(manager, this));
+        Objects.requireNonNull(getCommand("warpspawn")).setExecutor(new WarpSpawnCommand(manager, this));
 	}
 	   
     protected void registerListeners() {

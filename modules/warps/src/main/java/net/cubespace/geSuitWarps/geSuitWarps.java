@@ -11,7 +11,7 @@ import net.cubespace.geSuitWarps.managers.WarpsManager;
 
 public class geSuitWarps extends BukkitModule {
 
-    private WarpsManager manager;
+    private final WarpsManager manager;
 	public geSuitWarps() {
 		super("warps", true);
         manager = new WarpsManager(this);

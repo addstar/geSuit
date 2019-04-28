@@ -9,10 +9,10 @@ import java.util.List;
  * Created by benjamincharlton on 7/08/2017.
  */
 public class AdminCommand {
-    public String command;
-    public String server;
-    private String commandSender;
-    public List<String> args = new ArrayList<>();
+    public final String command;
+    public final String server;
+    private final String commandSender;
+    public final List<String> args = new ArrayList<>();
 
     public AdminCommand(String command, String server, String sender, String... args) {
         this.command = command;

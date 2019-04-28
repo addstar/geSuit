@@ -21,7 +21,7 @@ import java.util.Map;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class Converter {
-    private ConnectionPool connectionPool = new ConnectionPool();
+    private final ConnectionPool connectionPool = new ConnectionPool();
 
     private class Players implements IRepository {
         void convert() {

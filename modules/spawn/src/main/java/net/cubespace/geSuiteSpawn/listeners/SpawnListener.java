@@ -24,13 +24,10 @@ public class SpawnListener implements Listener {
     public void playerLogin( PlayerJoinEvent e ) {
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
         if ( !SpawnManager.HAS_SPAWNS ) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, new Runnable() {
-                @Override
-                public void run() {
-                    if ( !SpawnManager.HAS_SPAWNS ) {
-                        manager.getSpawns();
-                        SpawnManager.HAS_SPAWNS = true;
-                    }
+            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, () -> {
+                if (!SpawnManager.HAS_SPAWNS) {
+                    manager.getSpawns();
+                    SpawnManager.HAS_SPAWNS = true;
                 }
             }, 10L );
         }

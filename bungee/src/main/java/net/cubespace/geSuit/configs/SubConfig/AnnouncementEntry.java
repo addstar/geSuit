@@ -9,5 +9,6 @@ import java.util.ArrayList;
  */
 public class AnnouncementEntry extends YamlConfig {
     public Integer Interval = 150;
+    @SuppressWarnings("CanBeFinal")
     public ArrayList<String> Messages = new ArrayList<>();
 }

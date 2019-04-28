@@ -64,13 +64,9 @@ public class PlayerMoveListener implements Listener {
         }
         Material portal;
         Material enderPortal;
-        if (instance.isLegacy()) {
-            portal = Material.getMaterial("portal");
-            enderPortal = Material.getMaterial("END_PORTAL");
-        } else{
-            portal = Material.getMaterial("NETHER_PORTAL");
-            enderPortal = Material.getMaterial("END_PORTAL");
-        }
+        portal = Material.getMaterial("NETHER_PORTAL");
+        enderPortal = Material.getMaterial("END_PORTAL");
+
         if (f.getRelative(BlockFace.NORTH).getType() == portal || f.getRelative(BlockFace.NORTH).getType() == enderPortal) {
             b = f.getRelative(BlockFace.NORTH);
         } else if (f.getRelative(BlockFace.EAST).getType() == portal || f.getRelative(BlockFace.EAST).getType() == enderPortal) {

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class geSuitPortals extends BukkitModule {
 
     public static WorldEditPlugin WORLDEDIT = null;
-    private PortalsManager manager;
+    private final PortalsManager manager;
 
     public geSuitPortals() {
         super("portals",true);

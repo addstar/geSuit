@@ -1,5 +1,7 @@
 package net.cubespace.geSuit;
 
+import au.com.addstar.dripreporter.DripReporterApi;
+
 import net.cubespace.geSuit.commands.*;
 import net.cubespace.geSuit.database.convert.Converter;
 import net.cubespace.geSuit.listeners.*;
@@ -11,6 +13,8 @@ import org.bstats.bungeecord.Metrics;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.Getter;
 
 
 public class geSuit extends Plugin
@@ -24,7 +28,10 @@ public class geSuit extends Plugin
     public static ProxyServer proxy;
     private boolean DebugEnabled = false;
     public static APIManager api;
-
+    @Getter
+    private static DripReporterApi monitor;
+    @Getter
+    private static boolean isMonitored = false;
     public void onEnable()
     {
         instance = this;
@@ -35,6 +42,12 @@ public class geSuit extends Plugin
         if (ConfigManager.main.ConvertFromBungeeSuite) {
             Converter converter = new Converter();
             converter.convert();
+        }
+        if (this.getProxy().getPluginManager().getPlugin("DripReporter") != null) {
+            monitor = (DripReporterApi) getProxy().getPluginManager().getPlugin("DripReporter");
+            if (monitor != null) {
+                isMonitored = true;
+            }
         }
 
         registerListeners();

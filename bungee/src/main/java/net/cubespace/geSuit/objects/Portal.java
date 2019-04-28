@@ -5,13 +5,13 @@ import net.cubespace.geSuit.geSuit;
 import net.md_5.bungee.api.config.ServerInfo;
 
 public class Portal {
-    String name;
-    String server;
-    String fillType;
-    String type;
-    String dest;
-    Location max;
-    Location min;
+    final String name;
+    final String server;
+    final String fillType;
+    final String type;
+    final String dest;
+    final Location max;
+    final Location min;
 
 
     public Portal(String name, String server, String fillType, String type, String dest, Location max, Location min) {

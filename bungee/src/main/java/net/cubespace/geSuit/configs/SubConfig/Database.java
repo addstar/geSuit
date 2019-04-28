@@ -9,6 +9,7 @@ import java.util.Map;
 /**
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
+@SuppressWarnings("CanBeFinal")
 public class Database extends YamlConfig {
     @Comment("Your Database Host")
     public String Host = "localhost";

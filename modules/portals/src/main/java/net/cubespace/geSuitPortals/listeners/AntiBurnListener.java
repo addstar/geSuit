@@ -22,7 +22,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class AntiBurnListener implements Listener {
 
     private final geSuitPortals instance;
-    private final int FIRE_SPREAD_RADIUS = 2;
 
     public AntiBurnListener(geSuitPortals instance) {
         this.instance = instance;
@@ -36,6 +35,7 @@ public class AntiBurnListener implements Listener {
                         !event.getCause().equals(EntityDamageEvent.DamageCause.FIRE))) return;
 
         Location location = event.getEntity().getLocation();
+        int FIRE_SPREAD_RADIUS = 2;
         event.setCancelled(check(event.getEntity(), location.getBlockX(), location.getBlockY(), location.getBlockZ(), FIRE_SPREAD_RADIUS));
     }
 
@@ -67,12 +67,7 @@ public class AntiBurnListener implements Listener {
     private boolean canIgnite(Block block) {
         Material mat = block.getType();
         List<Material> ignitable = new ArrayList<>();
-        if (instance.isLegacy()) {
-            ignitable.add(Material.getMaterial("LAVA"));
-            ignitable.add(Material.getMaterial("STATIONARY_LAVA"));
-        }else{
-            ignitable.add(Material.getMaterial("LAVA"));
-        }
+        ignitable.add(Material.getMaterial("LAVA"));
         return (ignitable.contains(mat));
     }
 }

@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class TeleportManager {
-    public static HashMap<GSPlayer, GSPlayer> pendingTeleportsTPA = new HashMap<>(); // Player ----teleported---> player
-    public static HashMap<GSPlayer, GSPlayer> pendingTeleportsTPAHere = new HashMap<>(); // Player ----teleported---> player
-    private static int expireTime = ConfigManager.teleport.TeleportRequestExpireTime;
+    public static final HashMap<GSPlayer, GSPlayer> pendingTeleportsTPA = new HashMap<>(); // Player ----teleported---> player
+    public static final HashMap<GSPlayer, GSPlayer> pendingTeleportsTPAHere = new HashMap<>(); // Player ----teleported---> player
+    private static final int expireTime = ConfigManager.teleport.TeleportRequestExpireTime;
 
     public static void requestToTeleportToPlayer(String player, String target) {
         final GSPlayer bp = PlayerManager.getPlayer(player);

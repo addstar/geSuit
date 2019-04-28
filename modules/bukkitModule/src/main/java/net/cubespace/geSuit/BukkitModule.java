@@ -13,12 +13,19 @@ import java.util.logging.Level;
  * Created for the AddstarMC Project. Created by Narimm on 12/09/2018.
  */
 public abstract class BukkitModule extends JavaPlugin {
-    public BukkitModule instance;
-
-    private String CHANNEL_NAME;
-    private boolean legacy;
-    private boolean isSender;
     private static boolean debug = false;
+    public BukkitModule instance;
+    private String CHANNEL_NAME;
+    private final boolean isSender;
+
+    /**
+     * @param key      the channelname key
+     * @param isSender if true will register outgoing plugin channels as define by the key.
+     */
+    public BukkitModule(String key, boolean isSender) {
+        setChannelName(key);
+        this.isSender = isSender;
+    }
 
     public static boolean isDebug() {
         return debug;
@@ -33,23 +40,6 @@ public abstract class BukkitModule extends JavaPlugin {
         }
     }
 
-
-    
-    /**
-     *
-     * @param key the channelname key
-     * @param isSender if true will register outgoing plugin channels as define by the key.
-     */
-    public BukkitModule(String key, boolean isSender) {
-        setChannelName(key);
-        legacy = !(this.getServer().getVersion().contains("1.13"));
-        this.isSender = isSender;
-    }
-    
-    public boolean isLegacy(){
-        return legacy;
-    }
-    
     /**
      * A unique key for this plugin it will be namespace with gesuit;
      * @param key

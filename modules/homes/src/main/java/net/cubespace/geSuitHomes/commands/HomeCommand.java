@@ -56,24 +56,21 @@ public class HomeCommand extends CommandManager<HomesManager> {
 						final Location lastLocation = player.getLocation();
 						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Teleportation will commence in &c3 seconds&6. Don't move."));
 
-						instance.getServer().getScheduler().runTaskLater(instance, new Runnable() {
-							@Override
-							public void run() {
-								if (player.isOnline()) {
-									if ((lastLocation == null) || (lastLocation.getBlock() == null))
-										return;
+                        instance.getServer().getScheduler().runTaskLater(instance, () -> {
+                            if (player.isOnline()) {
+                                if ((lastLocation == null) || (lastLocation.getBlock() == null))
+                                    return;
 
-									if (lastLocation.getBlock().equals(player.getLocation().getBlock())) {
-										player.sendMessage(ChatColor.GOLD + "Teleportation commencing...");
-										player.saveData();
-										if (pname == null) {
-											manager.sendHome(sender, homename);
-										} else {
-											manager.sendOtherHome(sender, pname, homename);
-										}
-									} else {
-										player.sendMessage(ChatColor.RED + "Teleportation aborted because you moved.");
-									}
+                                if (lastLocation.getBlock().equals(player.getLocation().getBlock())) {
+                                    player.sendMessage(ChatColor.GOLD + "Teleportation commencing...");
+                                    player.saveData();
+                                    if (pname == null) {
+                                        manager.sendHome(sender, homename);
+                                    } else {
+                                        manager.sendOtherHome(sender, pname, homename);
+                                    }
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "Teleportation aborted because you moved.");
 								}
 							}
 						}, 60L);

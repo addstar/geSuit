@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public abstract class DataManager {
 
-    protected BukkitModule instance;
+    protected final BukkitModule instance;
 
     public DataManager(BukkitModule instance) {
         this.instance = instance;

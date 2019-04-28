@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
  */
 public class DebugCommand implements CommandExecutor{
 
-    private geSuitAdmin instance;
+    private final geSuitAdmin instance;
     public DebugCommand(geSuitAdmin plugin) {
         instance = plugin;
     }

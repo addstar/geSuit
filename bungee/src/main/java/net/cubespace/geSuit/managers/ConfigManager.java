@@ -7,15 +7,15 @@ import net.cubespace.geSuit.configs.*;
  * @author geNAZt (fabian.fassbender42@googlemail.com)
  */
 public class ConfigManager {
-    public static Announcements announcements = new Announcements();
-    public static BansConfig bans = new BansConfig();
-    public static LockDownConfig lockdown = new LockDownConfig();
-    public static MainConfig main = new MainConfig();
-    public static SpawnConfig spawn = new SpawnConfig();
-    public static TeleportConfig teleport = new TeleportConfig();
-    public static Messages messages = new Messages();
-    public static MOTDFile motd = new MOTDFile("motd.txt");
-    public static MOTDFile motdNew = new MOTDFile("motd-new.txt");
+    public static final Announcements announcements = new Announcements();
+    public static final BansConfig bans = new BansConfig();
+    public static final LockDownConfig lockdown = new LockDownConfig();
+    public static final MainConfig main = new MainConfig();
+    public static final SpawnConfig spawn = new SpawnConfig();
+    public static final TeleportConfig teleport = new TeleportConfig();
+    public static final Messages messages = new Messages();
+    public static final MOTDFile motd = new MOTDFile("motd.txt");
+    public static final MOTDFile motdNew = new MOTDFile("motd-new.txt");
 
     static {
         try {

@@ -62,7 +62,7 @@ public class Utilities {
         int count = 0;
         long amount = timeDiff / TimeUnit.DAYS.toMillis(1);
         if (amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             if (amount > 1) {
                 builder.append(" Days ");
             } else {
@@ -74,7 +74,7 @@ public class Utilities {
 
         amount = timeDiff / TimeUnit.HOURS.toMillis(1);
         if (count < precision && amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             if (amount > 1) {
                 builder.append(" Hours ");
             } else {
@@ -86,7 +86,7 @@ public class Utilities {
 
         amount = timeDiff / TimeUnit.MINUTES.toMillis(1);
         if (count < precision && amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             if (amount > 1) {
                 builder.append(" Mins ");
             } else {
@@ -98,7 +98,7 @@ public class Utilities {
 
         amount = timeDiff / TimeUnit.SECONDS.toMillis(1);
         if (count < precision && amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             if (amount > 1) {
                 builder.append(" Secs ");
             } else {
@@ -121,7 +121,7 @@ public class Utilities {
         int count = 0;
         long amount = timeDiff / TimeUnit.DAYS.toMillis(1);
         if (amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             builder.append("d ");
             timeDiff -= amount * TimeUnit.DAYS.toMillis(1);
             ++count;
@@ -129,7 +129,7 @@ public class Utilities {
 
         amount = timeDiff / TimeUnit.HOURS.toMillis(1);
         if (count < precision && amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             builder.append("h ");
             timeDiff -= amount * TimeUnit.HOURS.toMillis(1);
             ++count;
@@ -137,7 +137,7 @@ public class Utilities {
 
         amount = timeDiff / TimeUnit.MINUTES.toMillis(1);
         if (count < precision && amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             builder.append("m ");
             timeDiff -= amount * TimeUnit.MINUTES.toMillis(1);
             ++count;
@@ -145,7 +145,7 @@ public class Utilities {
 
         amount = timeDiff / TimeUnit.SECONDS.toMillis(1);
         if (count < precision && amount >= 1) {
-            builder.append(Long.toString(amount));
+            builder.append(amount);
             builder.append("s ");
             timeDiff -= amount * TimeUnit.SECONDS.toMillis(1);
             ++count;

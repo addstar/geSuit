@@ -8,15 +8,15 @@ import net.cubespace.geSuit.geSuit;
  */
 public class DatabaseManager {
     public static boolean enabled = false;
-    public static ConnectionPool connectionPool;
-    public static Homes homes;
-    public static Bans bans;
-    public static Players players;
-    public static Portals portals;
-    public static Spawns spawns;
-    public static Warps warps;
-    public static Tracking tracking;
-    public static OnTime ontime;
+    public static final ConnectionPool connectionPool;
+    public static final Homes homes;
+    public static final Bans bans;
+    public static final Players players;
+    public static final Portals portals;
+    public static final Spawns spawns;
+    public static final Warps warps;
+    public static final Tracking tracking;
+    public static final OnTime ontime;
 
     static {
         //geSuit.getInstance().getLogger().log(Level.INFO, "Instantiating DatabaseManager");

@@ -4,16 +4,16 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class Ban {
-    private int id;
-    private String player;
+    private final int id;
+    private final String player;
     private String uuid;
-    private String ip;
-    private String bannedBy;
-    private String reason;
-    private String type;
-    private int active;
-    private Date bannedOn;
-    private Date bannedUntil;
+    private final String ip;
+    private final String bannedBy;
+    private final String reason;
+    private final String type;
+    private final int active;
+    private final Date bannedOn;
+    private final Date bannedUntil;
 
     public Ban(int id, String player, String uuid, String ip, String bannedBy, String reason, String type, int active, Timestamp timestamp, Timestamp timestamp2) {
         this.id = id;

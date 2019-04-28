@@ -8,6 +8,7 @@ import java.io.File;
 /**
  * @author benjamincharlton on 26/08/2015.
  */
+@SuppressWarnings("CanBeFinal")
 public class LockDownConfig extends YamlConfig {
     public LockDownConfig() {
         CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "lockdown.yml");
