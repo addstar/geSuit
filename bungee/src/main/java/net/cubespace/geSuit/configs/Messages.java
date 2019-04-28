@@ -6,6 +6,7 @@ import net.cubespace.geSuit.geSuit;
 
 import java.io.File;
 
+@SuppressWarnings("CanBeFinal")
 public class Messages extends YamlConfig {
 
 
@@ -153,7 +154,7 @@ public class Messages extends YamlConfig {
     public String PLAYER_SEEN_ONLINE = "&6Player &c{player} &6is &aonline&6 since {timediff}{N}&6 {date}";
     public String PLAYER_SEEN_OFFLINE = "&6Player &c{player} &6is &4offline&6 since {timediff}{N}&6 {date}";
     public String PLAYER_SEEN_ITEM_FORMAT = "&6 - {name}: &r{value}";
-    
+
     // OnTime messages
     public String BUNGEE_COMMAND_ONTIME_USAGE = "&c" + "Usage: !ontime <player>";
     public String ONTIME_FIRST_JOINED = "&6First joined:&f {date} ({days} days)";

@@ -31,11 +31,11 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerManager {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss z");
-    
-    public static HashMap<UUID, GSPlayer> cachedPlayers = new HashMap<>();
-    public static HashMap<String, GSPlayer> onlinePlayers = new HashMap<>();
-    public static ArrayList<ProxiedPlayer> kickedPlayers = new ArrayList<>();
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss z");
+
+    public static final HashMap<UUID, GSPlayer> cachedPlayers = new HashMap<>();
+    public static final HashMap<String, GSPlayer> onlinePlayers = new HashMap<>();
+    public static final ArrayList<ProxiedPlayer> kickedPlayers = new ArrayList<>();
 
     public static boolean playerExists(ProxiedPlayer player) {
         return getPlayer(player.getName()) != null || playerExists(player.getUniqueId());
@@ -45,9 +45,6 @@ public class PlayerManager {
         return DatabaseManager.players.playerExists(Utilities.getStringFromUUID(player));
     }
 
-    private static boolean clientVersionOk(PendingConnection connection) {
-        return connection.getVersion() > ConfigManager.main.minClientProtocol;
-    }
 
     public static void initPlayer(final PendingConnection connection, final LoginEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(geSuit.getInstance(), () -> {
@@ -115,12 +112,6 @@ public class PlayerManager {
             } else {
                 gsPlayer = new GSPlayer(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), true);
                 gsPlayer.setFirstJoin(true);
-            }
-            if (!clientVersionOk(connection)) {
-                event.setCancelled(true);
-                event.setCancelReason(TextComponent.fromLegacyText(ConfigManager.messages.VERSION_TOO_LOW.replace("{version}", ConfigManager.main.minClientVersion)));
-                event.completeIntent(geSuit.getInstance());
-                return;
             }
             gsPlayer.setIp(connection.getAddress().getHostString());
 
