@@ -23,7 +23,7 @@ public class DebugCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if(commandSender.hasPermission("geSuit.admin")) {
-            if (args[0].equalsIgnoreCase("info")) {
+            if ((args.length > 0) && (args[0].equalsIgnoreCase("info"))) {
                 commandSender.sendMessage("geSuit Debug mode is: " + BukkitModule.isDebug());
                 commandSender.sendMessage("LoggingManager level: " + LoggingManager.getLevel() + " (" + LoggingManager.getLevel().intValue() + ")");
             } else {
