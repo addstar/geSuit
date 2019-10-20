@@ -17,6 +17,10 @@ public class LoggingManager {
         level = l;
     }
 
+    public static Level getLevel() {
+        return level;
+    }
+
     public static void info(String message) {
         if (level.intValue() >= Level.INFO.intValue()) logger.info(message);
     }

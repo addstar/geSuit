@@ -4,6 +4,7 @@ import au.com.addstar.geSuitAdmin.geSuitAdmin;
 
 import net.cubespace.geSuit.BukkitModule;
 
+import net.cubespace.geSuit.managers.LoggingManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,8 +23,13 @@ public class DebugCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if(commandSender.hasPermission("geSuit.admin")) {
-            instance.setDebug(!BukkitModule.isDebug());
-            commandSender.sendMessage("geSuit Debugging is " + BukkitModule.isDebug() + " for " + instance.getServer().getName());
+            if (args[0].equalsIgnoreCase("info")) {
+                commandSender.sendMessage("geSuit Debug mode is: " + BukkitModule.isDebug());
+                commandSender.sendMessage("LoggingManager level: " + LoggingManager.getLevel() + " (" + LoggingManager.getLevel().intValue() + ")");
+            } else {
+                instance.setDebug(!BukkitModule.isDebug());
+                commandSender.sendMessage("geSuit Debugging is " + BukkitModule.isDebug() + " for " + instance.getServer().getName());
+            }
             return true;
         }
         return false;
