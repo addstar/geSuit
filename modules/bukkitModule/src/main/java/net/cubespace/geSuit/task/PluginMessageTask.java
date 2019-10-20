@@ -32,7 +32,7 @@ public class PluginMessageTask extends BukkitRunnable
 					module,
                     module.getCHANNEL_NAME(),
 					bytes.toByteArray());
-            LoggingManager.debug("[" + module.getName() + "]" +
+            LoggingManager.debug("[" + module.getName() + "] " +
                         Utilities.dumpPacket(module.getCHANNEL_NAME(), "SEND", bytes.toByteArray()));
 
 		} else {
