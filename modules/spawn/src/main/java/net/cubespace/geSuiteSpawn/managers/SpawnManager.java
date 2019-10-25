@@ -193,14 +193,9 @@ public class SpawnManager extends DataManager {
 
     public void sendPlayerToSpawn(CommandSender sender) {
         Player p = ( Player ) sender;
-        if(p.hasPermission("gesuit.spawns.spawn.bed")){
-            try {
-                p.teleport(p.getBedSpawnLocation());
-            }catch(NullPointerException e){
-                //catch if they dont have a bed
-            }
-        }
-        if (hasWorldSpawn(p.getWorld()) && p.hasPermission("gesuit.spawns.spawn.world")) {
+        if (p.getBedSpawnLocation() != null && p.hasPermission("gesuit.spawns.spawn.bed")){
+            p.teleport(p.getBedSpawnLocation());
+        } else if (hasWorldSpawn(p.getWorld()) && p.hasPermission("gesuit.spawns.spawn.world")) {
             p.teleport( getWorldSpawn( p.getWorld() ) );
         } else if (hasServerSpawn() && p.hasPermission("gesuit.spawns.spawn.server")) {
             p.teleport( getServerSpawn() );
