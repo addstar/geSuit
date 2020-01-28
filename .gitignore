@@ -2,10 +2,12 @@
 /.project
 /.classpath
 /.settings/
-/.project
 */target
 *.*~
 classes
+
+#IntelliJ idea
+workspace.xml
 
 pom.xml.tag
 pom.xml.releaseBackup

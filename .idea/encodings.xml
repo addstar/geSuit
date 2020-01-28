@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/bungee/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bungee/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/bans/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/bans/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/bukkitModule/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/homes/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/homes/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/portals/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/portals/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/spawn/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/spawn/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/teleports/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/teleports/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/warps/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/modules/warps/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
