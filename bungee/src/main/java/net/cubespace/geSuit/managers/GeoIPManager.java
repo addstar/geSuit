@@ -1,147 +1,238 @@
+/*
+ * The MIT License (MIT)
+ * Copyright (c) 2015 - 2020., AddstarMC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal  in the Software without restriction, including without limitation the
+ * rights  to use, copy, modify, merge, publish, distribute, sublicense,and/or
+ * sell  copies of the Software, and to permit persons to whom the Software
+ * is  furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.cubespace.geSuit.managers;
 
-import com.maxmind.geoip.InvalidDatabaseException;
-import com.maxmind.geoip.Location;
-import com.maxmind.geoip.LookupService;
-import com.maxmind.geoip.regionName;
-
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.DatabaseReader.Builder;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.AsnResponse;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.CountryResponse;
+import com.maxmind.geoip2.record.Traits;
 import net.cubespace.geSuit.geSuit;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.zip.GZIPInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+/**
+ * Utility Class for GeoIP.
+ */
 public class GeoIPManager {
-    private static LookupService mLookup;
-    private static File mDatabaseFile;
-    
-    public static void initialize() {
-        if (ConfigManager.bans.GeoIP.ShowCity) {
-            mDatabaseFile = new File(geSuit.getInstance().getDataFolder(), "GeoIPCity.dat");
-        } else {
-            mDatabaseFile = new File(geSuit.getInstance().getDataFolder(), "GeoIP.dat");
-        }
-        
-        if (!mDatabaseFile.exists()) {
-            if (ConfigManager.bans.GeoIP.DownloadIfMissing) {
-                if (!updateDatabase()) {
-                    return;
-                }
-            } else {
-                geSuit.getInstance().getLogger().warning("[GeoIP] No GeoIP database is available locally and updating is off. Lookups will be unavailable");
-                return;
-            }
-        }
-        
-        try {
-            mLookup = new LookupService(mDatabaseFile);
-        } catch(IOException e) {
-            geSuit.getInstance().getLogger().warning("[GeoIP] Unable to read GeoIP database, if this No GeoIP database is available locally and updating is off. Lookups will be unavailable");
-        }
-    }
-    
-    public static String lookup(InetAddress address)
-    {
-        if (mLookup == null) { 
-            return null;
-        }
-        
-        if (ConfigManager.bans.GeoIP.ShowCity) {
+    /**
+     * If true output will show city.
+     */
+    private static boolean showCity = true;
+    /**
+     * Show Company name.
+     */
+    private static boolean showASN = true;
+    /**
+     * Show Extra Details.
+     */
+    private static boolean showDetail = false;
+    /**
+     * The Reader for country info.
+     */
+    private static DatabaseReader dbCountryReader;
+    /**
+     * The Reader for city info.
+     */
+    private static DatabaseReader dbCityReader;
+    /**
+     * The Reader for corporate info.
+     */
+    private static DatabaseReader dbASNReader;
 
-            if (address == InetAddress.getLoopbackAddress() || address.isAnyLocalAddress()) {
-                return null;
-            }
-            Location loc;
-            try {
-                loc = mLookup.getLocation(address);
-            } catch (InvalidDatabaseException e) {
-                geSuit.getInstance().getLogger().info("GEOIP: Could not retrieve:  " + address.toString());
-                return null;
-            }
-            if (loc == null) {
-                return null;
-            }
-            
-            String region = regionName.regionNameByCode(loc.countryCode, loc.region);
-            
-            String result = "";
-            if (loc.city != null) {
-                result += loc.city + ", ";
-            }
-            
-            if (region != null) {
-                result += region + ", ";
-            }
-            
-            result += loc.countryName;
-            return result;
-        } else {
-            return mLookup.getCountry(address).getName();
+    /**
+     * Used to initialize the class.
+     */
+    public static void initialize() {
+        File cityFile = new File(
+                ConfigManager.bans.GeoIP.pathToGeoIPFiles
+                        + ConfigManager.bans.GeoIP.geoIPCity);
+        File countryFile = new File(
+                ConfigManager.bans.GeoIP.pathToGeoIPFiles
+                        + ConfigManager.bans.GeoIP.geoIPCountry);
+        File asnFile = new File(
+                ConfigManager.bans.GeoIP.pathToGeoIPFiles
+              + ConfigManager.bans.GeoIP.geoIPASN);
+        showCity = ConfigManager.bans.GeoIP.ShowCity;
+        showDetail = ConfigManager.bans.GeoIP.ShowDetail;
+        if (!countryFile.exists()) {
+            geSuit.getInstance().getLogger().warning("[GeoIP] No GeoIP"
+                    + " database is available locally.  Please install and "
+                    + "run GeoIpupdate from MaxMind");
+            return;
+        }
+        try {
+            dbCountryReader = new Builder(countryFile).build();
+        } catch (IOException e) {
+            geSuit.getInstance().getLogger().warning("[GeoIP] Unable to "
+                    + "read GeoIP database, if this No GeoIP database is "
+                    + " available locally and updating is off. Lookups"
+                    + " will be unavailable");
+        }
+        try {
+            dbCityReader = new DatabaseReader.Builder(cityFile).build();
+        } catch (IOException e) {
+            geSuit.getInstance().getLogger().warning("[GeoIP] Unable to "
+                    + "read GeoIP City database, City records unavailable");
+            showCity = false;
+        }
+        try {
+            dbASNReader = new DatabaseReader.Builder(asnFile).build();
+        } catch (IOException e) {
+            geSuit.getInstance().getLogger().warning("[GeoIP] Unable to"
+                    + " read GeoIP ASN database, ASN records unavailable");
+            showASN = false;
         }
     }
-    
-    private static boolean updateDatabase() {
-        String url;
-        if (ConfigManager.bans.GeoIP.ShowCity) {
-            url = ConfigManager.bans.GeoIP.CityDownloadURL;
-        } else {
-            url = ConfigManager.bans.GeoIP.DownloadURL;
+
+    /**
+     * Simple 1 line output lookup.
+     * @param address {@code InetAddress}
+     * @return String
+     */
+    public static String lookup(final InetAddress address) {
+        return detailLookup(address).get(1);
+    }
+
+    /**
+     * Generate a detailed Lookup.
+     * @param address {@code InetAddress}
+     * @return a list of messages
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static List<String> detailLookup(final InetAddress address) {
+        if (address == InetAddress.getLoopbackAddress()
+                || address.isAnyLocalAddress()) {
+            return Collections.singletonList("localhost");
         }
-        
-        if (url == null || url.trim().isEmpty()) {
-            geSuit.getInstance().getLogger().severe("[GeoIP] There is no configured update url!");
-            return false;
+        if (dbCountryReader == null) {
+            return Collections.singletonList("NA");
         }
-        
+        List<String> response = new ArrayList<>();
+        if (!showCity && !showASN) {
+            return getCountry(address);
+        }
+        if (showCity) {
+            response = getCity(address);
+        }
+        if (showASN) {
+            try {
+                String out = response.get(1);
+                AsnResponse asnResponse = dbASNReader.asn(address);
+                String organization =
+                        asnResponse.getAutonomousSystemOrganization();
+                response.remove(1);
+                response.add(1, organization + ", " + out);
+            } catch (IOException | GeoIp2Exception e) {
+                geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
+                        + " to read GeoIP City database, city records"
+                        + " unavailable");
+                geSuit.getInstance().getLogger().warning("[GeoIP] "
+                        + e.getLocalizedMessage());
+            }
+        }
+        return response;
+    }
+
+    /**
+     * Add extra details.
+     * @param response List
+     * @param traits Traits
+     * @return List of Strings.
+     */
+    private static List<String> addDetails(final List<String> response,
+                                           final Traits traits) {
+        if (showDetail) {
+            response.add("Tor Node: " + traits.isTorExitNode());
+            response.add("Public Proxy: " + traits.isPublicProxy());
+            response.add("VPN Node: " + traits.isAnonymousVpn());
+            response.add("Connection Type: "
+                    + traits.getConnectionType().toString());
+            response.add("Domain: " + traits.getDomain().toLowerCase());
+            response.add("ISP: " + traits.getIsp());
+            response.add("Static IP Score: " + traits.getStaticIpScore());
+        }
+        return response;
+    }
+
+    /**
+     * Add City details.
+     * @param address {@code InetAddress}
+     * @return List
+     */
+    private static List<String> getCity(final InetAddress address) {
+        List<String> response = new ArrayList<>();
         try {
-            geSuit.getInstance().getLogger().info("[GeoIP] Downloading GeoIP database... This may take a while");
-            long lastNotify = System.currentTimeMillis();
-            URLConnection con = new URL(url).openConnection();
-            con.setConnectTimeout(10000);
-            con.connect();
-            
-            long total = con.getContentLengthLong();
-            long current = 0;
-            InputStream input = con.getInputStream();
-            if (url.endsWith(".gz")) {
-                input = new GZIPInputStream(input);
-            }
-            
-            FileOutputStream output = new FileOutputStream(mDatabaseFile);
-            byte[] buffer = new byte[2048];
-            int length = input.read(buffer);
-            while (length >= 0) {
-                output.write(buffer, 0, length);
-                
-                current += length;
-                if (System.currentTimeMillis() - lastNotify > 2000) {
-                    if (total == -1) {
-                        geSuit.getInstance().getLogger().info(String.format("[GeoIP] Downloading GeoIP database... %d bytes", current));
-                    } else {
-                        double percent = current / (double)total;
-                        percent *= 100;
-                        if (percent > 100) {
-                            percent = 100;
-                        }
-                        geSuit.getInstance().getLogger().info(String.format("[GeoIP] Downloading GeoIP database... %.0f%%", percent));
-                    }
-                    lastNotify = System.currentTimeMillis();
-                }
-                
-                length = input.read(buffer);
-            }
-            output.close();
-            input.close();
-            geSuit.getInstance().getLogger().info("[GeoIP] Download complete");
-            return true;
-        } catch(IOException e) {
-            geSuit.getInstance().getLogger().severe("[GeoIP] Download failed. IOException: " + e.getMessage());
-            return false;
+            StringBuilder out = new StringBuilder();
+            CityResponse cityResponse = dbCityReader.city(address);
+            String city = cityResponse.getCity().getName();
+            out.append(city);
+            out.append(", ");
+            String region = cityResponse.getMostSpecificSubdivision().getName();
+            out.append(region);
+            out.append(", ");
+            String country = cityResponse.getCountry().getName();
+            out.append(country);
+            response.add(out.toString());
+            return addDetails(response, cityResponse.getTraits());
+        } catch (IOException | GeoIp2Exception e) {
+            geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
+                    + " to read GeoIP City database, city records unavailable");
+            geSuit.getInstance().getLogger().warning("[GeoIP] "
+                    + e.getLocalizedMessage());
+            return getCountry(address);
         }
+
+    }
+
+    /**
+     * Add the country.
+     * @param address {@code InetAddress}
+     * @return List
+     */
+    private static List<String> getCountry(final InetAddress address) {
+        List<String> response = new ArrayList<>();
+        try {
+            CountryResponse countryResponse = dbCountryReader.country(address);
+            response.add(countryResponse.getCountry().getName());
+            return addDetails(response, countryResponse.getTraits());
+        } catch (GeoIp2Exception | IOException e) {
+            geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
+                    + " to read GeoIP Country database, Country "
+                    + "records unavailable");
+            geSuit.getInstance().getLogger().warning("[GeoIP] "
+                    + e.getLocalizedMessage());
+            response.add("NA");
+        }
+        return response;
     }
 }

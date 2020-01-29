@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class BansManager {
 
@@ -789,9 +790,10 @@ public class BansManager {
                     if (geSuit.proxy.getPlayer(searchString) != null) {
                         final ProxiedPlayer player = geSuit.proxy.getPlayer(searchString);
                         geSuit.proxy.getScheduler().runAsync(geSuit.getInstance(), () -> {
-                            String location = GeoIPManager.lookup(player.getAddress().getAddress());
-                            if (location != null) {
-                                PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] Player " + player.getName() + "'s IP resolves to " + location);
+                            List<String> location = GeoIPManager.detailLookup(player.getAddress().getAddress());
+                            if (location.size() < 0 ) {
+                                PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] Player " + player.getName() + "'s IP resolves: ");
+                                location.forEach(s1 -> PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] " + s1));
                             }
                         });
                     }
