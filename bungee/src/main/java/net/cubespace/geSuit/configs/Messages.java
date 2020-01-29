@@ -30,6 +30,8 @@ public class Messages extends YamlConfig {
     public String PLAYER_BANNED_ALT_JOIN = "&c{player} same IP as banned player {alt}";
     public String PLAYER_ALT_JOIN = "&b{player} same IP ({ip}) as {alt}";
     public String PLAYER_GEOIP = "&8{player} is from {location}";
+    public String PLAYER_NOGEOIP = "&8{player}'s location could not be determined";
+
     public String PLAYER_JOIN_NAMECHANGE = "&e{player} ({old}) joined the game.";
     public String PLAYER_JOIN_NAMECHANGE_PROXY = "&ePlayer {player} was previously known as {old}.";
 

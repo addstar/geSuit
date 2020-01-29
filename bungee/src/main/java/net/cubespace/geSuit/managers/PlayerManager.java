@@ -17,6 +17,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,7 +58,7 @@ public class PlayerManager {
                     event.setCancelled(true);
                     String timeRemaining = Utilities.buildShortTimeDiffString(LockDownManager.getExpiryTime() - System.currentTimeMillis(), 2);
                     event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.LOCKDOWN_MESSAGE.replace("{message}", LockDownManager.getOptionalMessage()))));
-                    LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to server lockdown! Remaining: " + timeRemaining + ", Until: " + LockDownManager.getExpiryTimeString() + " (" + connection.getAddress().toString() + ")");
+                    LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to server lockdown! Remaining: " + timeRemaining + ", Until: " + LockDownManager.getExpiryTimeString() + " (" + connection.getSocketAddress().toString() + ")");
                     event.completeIntent(geSuit.getInstance());
                     return;
 
@@ -77,7 +79,7 @@ public class PlayerManager {
                             long timeDiff = then.getTime() - now.getTime();
 
                             event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.TEMP_BAN_MESSAGE.replace("{sender}", b.getBannedBy()).replace("{time}", sdf.format(then)).replace("{left}", Utilities.buildTimeDiffString(timeDiff, 2)).replace("{shortleft}", Utilities.buildShortTimeDiffString(timeDiff, 10)).replace("{message}", b.getReason()))));
-                            LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being temp banned!" + " (" + connection.getAddress().toString() + ")");
+                            LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being temp banned!" + " (" + connection.getSocketAddress().toString() + ")");
                         } else {
                             banned = false;
                         }
@@ -85,7 +87,7 @@ public class PlayerManager {
                         event.setCancelled(true);
 
                         event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.BAN_PLAYER_MESSAGE.replace("{sender}", b.getBannedBy()).replace("{message}", b.getReason()))));
-                        LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being banned!" + " (" + connection.getAddress().toString() + ")");
+                        LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being banned!" + " (" + connection.getSocketAddress().toString() + ")");
                     }
 
                     if (banned) {
@@ -113,7 +115,13 @@ public class PlayerManager {
                 gsPlayer = new GSPlayer(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), true);
                 gsPlayer.setFirstJoin(true);
             }
-            gsPlayer.setIp(connection.getAddress().getHostString());
+            SocketAddress address = connection.getSocketAddress();
+            if (address instanceof InetSocketAddress) {
+                InetSocketAddress inetSocket = (InetSocketAddress) connection.getSocketAddress();
+                gsPlayer.setIp(inetSocket.getHostString());
+            } else {
+                gsPlayer.setIp(address.toString());
+            }
 
             Track history = DatabaseManager.tracking.checkNameChange(connection.getUniqueId(), connection.getName());
             if (history != null) {
