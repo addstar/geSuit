@@ -50,7 +50,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.1" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: au.com.addstar.dripreporter:DripReporterAPI:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: au.com.addstar.dripreporter:DripReporterAPI:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.dropwizard.metrics:metrics-core:4.1.0-rc1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.dropwizard.metrics:metrics-healthchecks:4.1.0-rc1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.13-SNAPSHOT" level="project" />
