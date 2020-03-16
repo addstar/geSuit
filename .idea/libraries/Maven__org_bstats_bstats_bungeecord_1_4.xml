@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="Maven: org.bstats:bstats-bungeecord:1.4">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/bstats/bstats-bungeecord/1.4/bstats-bungeecord-1.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/bstats/bStats-bungeecord/1.4/bstats-bungeecord-1.4.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/org/bstats/bstats-bungeecord/1.4/bstats-bungeecord-1.4-javadoc.jar!/" />
