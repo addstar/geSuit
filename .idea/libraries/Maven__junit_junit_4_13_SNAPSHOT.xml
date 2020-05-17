@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: junit:junit:4.13-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13-SNAPSHOT/junit-4.13-20191201.101017-199.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13-SNAPSHOT/junit-4.13-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13-SNAPSHOT/junit-4.13-20191201.101017-199-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13-SNAPSHOT/junit-4.13-SNAPSHOT-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13-SNAPSHOT/junit-4.13-20191201.101017-199-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.13-SNAPSHOT/junit-4.13-SNAPSHOT-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

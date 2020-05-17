@@ -2,18 +2,19 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="BukkitModule" />
         <module name="geSuitPortals" />
-        <module name="geSuitTeleports" />
+        <module name="BukkitModule" />
         <module name="geSuit" />
-        <module name="geSuitHomes" />
+        <module name="geSuitTeleports" />
+        <module name="geSuitSpawn" />
         <module name="geSuitAdmin" />
         <module name="geSuitBans" />
-        <module name="geSuitSpawn" />
+        <module name="geSuitHomes" />
         <module name="geSuitWarps" />
       </profile>
     </annotationProcessing>

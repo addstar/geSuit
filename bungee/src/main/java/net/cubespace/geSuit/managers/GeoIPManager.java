@@ -146,10 +146,15 @@ public class GeoIPManager {
         }
         if (showASN) {
             try {
-                String out = response.get(1);
+                String out;
+                if (response.size() > 0) {
+                    out = response.get(1);
+                } else {
+                    out = "";
+                }
                 AsnResponse asnResponse = dbASNReader.asn(address);
                 String organization =
-                        asnResponse.getAutonomousSystemOrganization();
+                      asnResponse.getAutonomousSystemOrganization();
                 response.remove(1);
                 response.add(1, organization + ", " + out);
             } catch (IOException | GeoIp2Exception e) {
