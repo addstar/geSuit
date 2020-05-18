@@ -53,11 +53,15 @@ public class DatabaseManager {
                     }
                 } catch (IllegalStateException e) {
                     geSuit.getInstance().getLogger().warning("Gesuit could not initaliaze the database.... as " +
-                            "a result no warps portals or spawn locations are loaded....");
+                          "a result no warps portals or spawn locations are loaded....");
                     enabled = false;
                 }
             }
         });
+    }
+
+    public static void init() {
+        //creation
     }
 
 }

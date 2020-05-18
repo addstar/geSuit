@@ -11,6 +11,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.bstats.bungeecord.Metrics;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,18 +39,12 @@ public class geSuit extends Plugin
         LoggingManager.log(ChatColor.GREEN + "Starting geSuit");
         proxy = ProxyServer.getInstance();
         LoggingManager.log(ChatColor.GREEN + "Initialising Managers");
-        new DatabaseManager();
+        DatabaseManager.init();
         if (ConfigManager.main.ConvertFromBungeeSuite) {
             Converter converter = new Converter();
             converter.convert();
         }
-        if (this.getProxy().getPluginManager().getPlugin("DripReporter") != null) {
-            monitor = (DripReporterApi) getProxy().getPluginManager().getPlugin("DripReporter");
-            if (monitor != null) {
-                isMonitored = true;
-            }
-        }
-
+        enableDripReporterApi();
         registerListeners();
         registerCommands();
         GeoIPManager.initialize();
@@ -62,12 +57,23 @@ public class geSuit extends Plugin
             return map;
         });
         metrics.addCustomChart(chart);
-    
-    
+
+
     }
 
-    private void registerCommands()
-    {
+    private void enableDripReporterApi() {
+        Collection<Plugin> plugins = this.getProxy().getPluginManager().getPlugins();
+        for (Plugin plugin : plugins) {
+            if (plugin instanceof DripReporterApi) {
+                monitor = (DripReporterApi) plugin;
+                if (monitor.isEnabled()) {
+                    isMonitored = true;
+                }
+            }
+        }
+    }
+
+    private void registerCommands() {
         // A little hardcore. Prevent updating without a restart. But command squatting = bad!
         if (ConfigManager.main.MOTD_Enabled) {
             proxy.getPluginManager().registerCommand(this, new MOTDCommand());
