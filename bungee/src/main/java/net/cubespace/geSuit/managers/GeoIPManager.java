@@ -147,8 +147,8 @@ public class GeoIPManager {
         if (showASN) {
             try {
                 String out;
-                if (response.size() > 0) {
-                    out = response.get(1);
+                if (!response.isEmpty()) {
+                    out = response.get(0);
                 } else {
                     out = "";
                 }
