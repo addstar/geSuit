@@ -62,13 +62,19 @@ public class geSuit extends Plugin
     }
 
     private void enableDripReporterApi() {
-        Collection<Plugin> plugins = this.getProxy().getPluginManager().getPlugins();
-        for (Plugin plugin : plugins) {
-            if (plugin instanceof DripReporterApi) {
-                monitor = (DripReporterApi) plugin;
-                if (monitor.isEnabled()) {
-                    isMonitored = true;
+        Plugin plugin = this.getProxy().getPluginManager().getPlugin("DripCordReporter");
+        if (plugin != null) {
+            try {
+                if (plugin instanceof DripReporterApi) {
+                    monitor = (DripReporterApi) plugin;
+                    if (monitor.isEnabled()) {
+                        isMonitored = true;
+                    }
                 }
+            } catch (Throwable e) {
+                this.getLogger().warning("Conflicting Plugin DripCordReporter");
+                this.getLogger().warning(e.getMessage());
+                isMonitored = false;
             }
         }
     }
