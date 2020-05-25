@@ -130,42 +130,47 @@ public class GeoIPManager {
      */
     @SuppressWarnings("WeakerAccess")
     public static List<String> detailLookup(final InetAddress address) {
-        if (address == InetAddress.getLoopbackAddress()
-                || address.isAnyLocalAddress()) {
-            return Collections.singletonList("localhost");
-        }
-        if (dbCountryReader == null) {
-            return Collections.singletonList("NA");
-        }
-        List<String> response = new ArrayList<>();
-        if (!showCity && !showASN) {
-            return getCountry(address);
-        }
-        if (showCity) {
-            response = getCity(address);
-        }
-        if (showASN) {
-            try {
-                String out;
-                if (!response.isEmpty()) {
-                    out = response.get(0);
-                } else {
-                    out = "";
-                }
-                AsnResponse asnResponse = dbASNReader.asn(address);
-                String organization =
-                      asnResponse.getAutonomousSystemOrganization();
-                response.remove(0);
-                response.add(0, organization + ", " + out);
-            } catch (IOException | GeoIp2Exception e) {
-                geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
-                        + " to read GeoIP City database, city records"
-                        + " unavailable");
-                geSuit.getInstance().getLogger().warning("[GeoIP] "
-                        + e.getLocalizedMessage());
+        try {
+            if (address == InetAddress.getLoopbackAddress()
+                  || address.isAnyLocalAddress()) {
+                return Collections.singletonList("localhost");
             }
+            if (dbCountryReader == null) {
+                return Collections.singletonList("NA");
+            }
+            List<String> response = new ArrayList<>();
+            if (!showCity && !showASN) {
+                return getCountry(address);
+            }
+            if (showCity) {
+                response = getCity(address);
+            }
+            if (showASN) {
+                try {
+                    String out;
+                    if (!response.isEmpty()) {
+                        out = response.get(0);
+                    } else {
+                        out = "";
+                    }
+                    AsnResponse asnResponse = dbASNReader.asn(address);
+                    String organization =
+                          asnResponse.getAutonomousSystemOrganization();
+                    response.remove(0);
+                    response.add(0, organization + ", " + out);
+                } catch (IOException | GeoIp2Exception e) {
+                    geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
+                          + " to read GeoIP City database, city records"
+                          + " unavailable");
+                    geSuit.getInstance().getLogger().warning("[GeoIP] "
+                          + e.getLocalizedMessage());
+                }
+            }
+            return response;
+        } catch (Throwable err) {
+            geSuit.getInstance().getLogger().warning(err.getMessage());
+            return Collections.emptyList();
         }
-        return response;
     }
 
     /**
