@@ -15,6 +15,6 @@ public class LockDownConfig extends YamlConfig {
     }
 
     public String LockdownTime = "5m";
-    public boolean LockedDown = false; //if set to true the server will start lockedDown and will release in 5minutes
+    public Boolean LockedDown = false; //if set to true the server will start lockedDown and will release in 5minutes
     public String StartupMsg = ""; //if set and no message is set when the lockdown is started this will be used
 }

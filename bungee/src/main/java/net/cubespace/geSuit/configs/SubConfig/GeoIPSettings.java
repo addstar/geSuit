@@ -6,7 +6,7 @@ import net.cubespace.Yamler.Config.YamlConfig;
 public class GeoIPSettings extends YamlConfig {
 
     @Comment("GeoIP On / Off")
-    public boolean ShowOnLogin = true;
+    public Boolean ShowOnLogin = true;
     @Comment("Customise the path to your GeoIP2 Files")
     public String pathToGeoIPFiles = "/usr/share/GeoIP/";
 
@@ -20,11 +20,11 @@ public class GeoIPSettings extends YamlConfig {
     public String geoIPASN = "GeoLite2-ASN.mmdb";
 
     @Comment("Show GeoIP City")
-    public boolean ShowCity = true;
+    public Boolean ShowCity = true;
 
     @Comment("Show GeoIP Trait details")
-    public boolean ShowDetail = false;
+    public Boolean ShowDetail = false;
 
     @Comment("Show GeoIP Organization")
-    public boolean ShowAsn = false;
+    public Boolean ShowAsn = false;
 }
