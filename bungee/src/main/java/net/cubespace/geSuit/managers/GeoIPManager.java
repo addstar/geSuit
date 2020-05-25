@@ -155,8 +155,8 @@ public class GeoIPManager {
                 AsnResponse asnResponse = dbASNReader.asn(address);
                 String organization =
                       asnResponse.getAutonomousSystemOrganization();
-                response.remove(1);
-                response.add(1, organization + ", " + out);
+                response.remove(0);
+                response.add(0, organization + ", " + out);
             } catch (IOException | GeoIp2Exception e) {
                 geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
                         + " to read GeoIP City database, city records"
