@@ -17,8 +17,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -789,13 +792,25 @@ public class BansManager {
                     return;
                 } else {
                     PlayerManager.sendMessageToTarget(sender,
-                            ChatColor.GREEN + "[Tracker] Player \"" + searchString + "\" is associated with " + tracking.size() + " accounts/IPs:");
-
+                          ChatColor.GREEN + "[Tracker] Player \"" + searchString + "\" is associated with " + tracking.size() + " accounts/IPs:");
+                    if (options.contains("d")) {
+                        for (Track t : tracking) {
+                            try {
+                                InetAddress a = InetAddress.getByName(t.getIp());
+                                String msg = ConfigManager.messages.GEOIP_REPORT
+                                      .replace("{ip]", t.getIp())
+                                      .replace("{location}", GeoIPManager.lookup(a));
+                                PlayerManager.sendMessageToTarget(sender, msg);
+                            } catch (UnknownHostException ignore) {
+                                //suppress
+                            }
+                        }
+                    }
                     if (geSuit.proxy.getPlayer(searchString) != null) {
                         final ProxiedPlayer player = geSuit.proxy.getPlayer(searchString);
                         geSuit.proxy.getScheduler().runAsync(geSuit.getInstance(), () -> {
                             List<String> location = GeoIPManager.detailLookup(player.getAddress().getAddress());
-                            if (location.size() < 0 ) {
+                            if (location.size() < 0) {
                                 PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] Player " + player.getName() + "'s IP resolves: ");
                                 location.forEach(s1 -> PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] " + s1));
                             }

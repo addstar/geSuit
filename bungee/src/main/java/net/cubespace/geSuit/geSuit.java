@@ -102,6 +102,7 @@ public class geSuit extends Plugin
         proxy.getPluginManager().registerCommand(this, new ForceBatchNameHistoryUpdateCommand());
         proxy.getPluginManager().registerCommand(this, new ActiveKicksCommand());
         proxy.getPluginManager().registerCommand(this, new AdminCommands());
+        proxy.getPluginManager().registerCommand(this, new BacktoNewSpawn());
         if (ConfigManager.bans.TrackOnTime) {
         	proxy.getPluginManager().registerCommand(this, new OnTimeCommand());
             proxy.getPluginManager().registerCommand(this, new LastLoginsCommand());
@@ -139,6 +140,7 @@ public class geSuit extends Plugin
         proxy.getPluginManager().registerListener(this, new SpawnMessageListener(legacy));
         proxy.getPluginManager().registerListener(this, new APIMessageListener(legacy));
         proxy.getPluginManager().registerListener(this, new AdminMessageListener(legacy));
+
         if (ConfigManager.main.BungeeChatIntegration) {
             proxy.getPluginManager().registerListener(this, new BungeeChatListener());
         }
@@ -171,10 +173,6 @@ public class geSuit extends Plugin
 
         private final String channelName;
         private final String legacy_channelName;
-
-        CHANNEL_NAMES(String string) {
-            this(string, null);
-        }
 
         CHANNEL_NAMES(String string, String legacy) {
 
