@@ -120,7 +120,7 @@ public class GeoIPManager {
      * @return String
      */
     public static String lookup(final InetAddress address) {
-        return detailLookup(address).get(1);
+        return detailLookup(address).get(0);
     }
 
     /**
