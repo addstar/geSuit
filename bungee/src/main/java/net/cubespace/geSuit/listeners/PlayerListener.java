@@ -38,7 +38,9 @@ public class PlayerListener implements Listener {
     public void playerLogin(LoginEvent event) {
         event.registerIntent(geSuit.getInstance());
         PlayerManager.initPlayer(event.getConnection(), event);
-        if (event.isCancelled()) blockedLogins.mark();
+        if (event.isCancelled() && geSuit.isMonitored()) {
+            blockedLogins.mark();
+        }
     }
     
     @EventHandler(priority = EventPriority.LOW)

@@ -51,7 +51,7 @@ public class GeoIPManager {
     /**
      * Show Company name.
      */
-    private static boolean showASN = true;
+    private static boolean showASN = false;
     /**
      * Show Extra Details.
      */
@@ -84,6 +84,7 @@ public class GeoIPManager {
               + ConfigManager.bans.GeoIP.geoIPASN);
         showCity = ConfigManager.bans.GeoIP.ShowCity;
         showDetail = ConfigManager.bans.GeoIP.ShowDetail;
+        showASN = ConfigManager.bans.GeoIP.ShowAsn;
         if (!countryFile.exists()) {
             geSuit.getInstance().getLogger().warning("[GeoIP] No GeoIP"
                     + " database is available locally.  Please install and "
@@ -95,22 +96,24 @@ public class GeoIPManager {
         } catch (IOException e) {
             geSuit.getInstance().getLogger().warning("[GeoIP] Unable to "
                     + "read GeoIP database, if this No GeoIP database is "
-                    + " available locally and updating is off. Lookups"
-                    + " will be unavailable");
+                  + " available locally and updating is off. Lookups"
+                  + " will be unavailable");
         }
         try {
             dbCityReader = new DatabaseReader.Builder(cityFile).build();
         } catch (IOException e) {
             geSuit.getInstance().getLogger().warning("[GeoIP] Unable to "
-                    + "read GeoIP City database, City records unavailable");
+                  + "read GeoIP City database, City records unavailable");
             showCity = false;
         }
-        try {
-            dbASNReader = new DatabaseReader.Builder(asnFile).build();
-        } catch (IOException e) {
-            geSuit.getInstance().getLogger().warning("[GeoIP] Unable to"
-                    + " read GeoIP ASN database, ASN records unavailable");
-            showASN = false;
+        if (showASN) {
+            try {
+                dbASNReader = new DatabaseReader.Builder(asnFile).build();
+            } catch (IOException e) {
+                geSuit.getInstance().getLogger().warning("[GeoIP] Unable to"
+                      + " read GeoIP ASN database, ASN records unavailable");
+                showASN = false;
+            }
         }
     }
 
@@ -130,6 +133,7 @@ public class GeoIPManager {
      */
     @SuppressWarnings("WeakerAccess")
     public static List<String> detailLookup(final InetAddress address) {
+        List<String> response = new ArrayList<>();
         try {
             if (address == InetAddress.getLoopbackAddress()
                   || address.isAnyLocalAddress()) {
@@ -138,7 +142,6 @@ public class GeoIPManager {
             if (dbCountryReader == null) {
                 return Collections.singletonList("NA");
             }
-            List<String> response = new ArrayList<>();
             if (!showCity && !showASN) {
                 return getCountry(address);
             }
@@ -160,8 +163,9 @@ public class GeoIPManager {
                     response.add(0, organization + ", " + out);
                 } catch (IOException | GeoIp2Exception e) {
                     geSuit.getInstance().getLogger().warning("[GeoIP] Unable"
-                          + " to read GeoIP City database, city records"
+                          + " to read GeoIP ASN database, ASN records"
                           + " unavailable");
+                    showASN = false;
                     geSuit.getInstance().getLogger().warning("[GeoIP] "
                           + e.getLocalizedMessage());
                 }

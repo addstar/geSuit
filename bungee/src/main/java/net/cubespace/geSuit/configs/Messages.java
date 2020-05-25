@@ -124,6 +124,7 @@ public class Messages extends YamlConfig {
     public String BAN_PLAYER_MESSAGE = "&c" + "You have been banned.{N}{N}&cReason: &e{message}";
     public String BAN_PLAYER_BROADCAST = "&b" + "{player} has been banned. Reason: {message}";
     public String BAN_PLAYER_AUTO_BROADCAST = "&b" + "{player} has been auto-banned.";
+    public String BAN_FAILED_UNKNOWN_REASON = "&c" + "The ban has failed for an unknown reason";
     public String TEMP_BAN_MESSAGE = "&c" + "You have been temporarily banned.{N}{N}&cReason: &e{message}{N}{N}&cRemaining ban time: &e{shortleft}";
     public String TEMP_BAN_BROADCAST = "&b" + "{player} has been temporarily banned ({shortleft}). Reason: {message}";
     public String TEMP_BAN_AUTO_BROADCAST = "&b" + "{player} has been auto temp-banned ({shortleft}).";
@@ -151,7 +152,7 @@ public class Messages extends YamlConfig {
     public String HOME_SET = "&6" + "Your home \"{home}\" has been set";
     public String HOME_DOES_NOT_EXIST = "&c" + "That home does not exist";
     public String HOME_DELETED = "&c" + "Your home \"{home}\" has been deleted";
-    public String HOME_OTHER_DELETED = "&c" + "{player}\'s home \"{home}\" has been deleted";
+    public String HOME_OTHER_DELETED = "&c" + "{player}'s home \"{home}\" has been deleted";
     // Seen messages
     public String PLAYER_SEEN_ONLINE = "&6Player &c{player} &6is &aonline&6 since {timediff}{N}&6 {date}";
     public String PLAYER_SEEN_OFFLINE = "&6Player &c{player} &6is &4offline&6 since {timediff}{N}&6 {date}";

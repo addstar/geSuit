@@ -142,8 +142,12 @@ public class BansManager {
         }
         String bannedBy = sender.getName();
         if (!DatabaseManager.bans.isPlayerBanned(ip)) {
-            DatabaseManager.bans.banPlayer(player, uuid, ip, bannedBy, reason, "ipban");
-            callEvent(new BanPlayerEvent(new Ban(-1, player, uuid, ip, bannedBy, reason, "ipban", 1, null, null), false));
+            if (DatabaseManager.bans.banPlayer(player, uuid, ip, bannedBy, reason, "ipban") > 0) {
+                callEvent(new BanPlayerEvent(new Ban(-1, player, uuid, ip, bannedBy, reason, "ipban", 1, null, null), false));
+            } else {
+                PlayerManager.sendMessageToTarget(sender, ConfigManager.messages.BAN_FAILED_UNKNOWN_REASON);
+                return;
+            }
         }
 
         for (GSPlayer p : PlayerManager.getPlayersByIP(ip)) {
