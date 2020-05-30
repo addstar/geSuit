@@ -1,9 +1,13 @@
 package net.cubespace.geSuit.configs;
 
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -13,7 +17,21 @@ import static org.junit.Assert.assertNotEquals;
  * Created by benjamincharlton on 24/09/2017.
  */
 public class MainConfigTest {
-    File testFile = new File("target/tests/newConfig.yml");
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    File testFile;
+    File testFile2;
+
+    @Before
+    public void setup() {
+        try {
+            testFile = folder.newFile("config.yml");
+            testFile2 = folder.newFile("bans.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void yamlTest() throws Exception {
@@ -26,6 +44,16 @@ public class MainConfigTest {
         newConfig.load(testFile);
         assertEquals(newConfig.Seen_Enabled, testConfig.Seen_Enabled);
         assertNotEquals(newConfig.MOTD_Enabled, testConfig.MOTD_Enabled);
+        BansConfig bansConfig = new BansConfig(testFile2);
+        bansConfig.init();
+        bansConfig.save();
+        assertEquals(true, bansConfig.GeoIP.ShowOnLogin);
+        bansConfig.GeoIP.ShowOnLogin = false;
+        bansConfig.save();
+        BansConfig newConfig2 = new BansConfig(testFile2);
+        newConfig2.load();
+        assertEquals(false, newConfig2.GeoIP.ShowOnLogin);
+
     }
 
     @Test

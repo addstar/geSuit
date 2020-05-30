@@ -1,15 +1,10 @@
 package net.cubespace.geSuit.configs;
 
-import net.cubespace.Yamler.Config.YamlConfig;
-import net.cubespace.geSuit.geSuit;
-
-import java.io.File;
-
-public class SpawnConfig extends YamlConfig {
+public class SpawnConfig extends BaseConfig {
     public SpawnConfig() {
-        CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "spawns.yml");
+        super("spawns");
     }
 
-	public Boolean SpawnNewPlayerAtNewspawn = false;
-	public Boolean ForceAllPlayersToProxySpawn = false;
+    public Boolean SpawnNewPlayerAtNewspawn = false;
+    public Boolean ForceAllPlayersToProxySpawn = false;
 }

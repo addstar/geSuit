@@ -74,21 +74,21 @@ public class GeoIPManager {
      */
     public static void initialize() {
         File cityFile = new File(
-                ConfigManager.bans.GeoIP.pathToGeoIPFiles
-                        + ConfigManager.bans.GeoIP.geoIPCity);
+              ConfigManager.bans.GeoIP.pathToGeoIPFiles
+                    + ConfigManager.bans.GeoIP.geoIPCity);
         File countryFile = new File(
-                ConfigManager.bans.GeoIP.pathToGeoIPFiles
-                        + ConfigManager.bans.GeoIP.geoIPCountry);
+              ConfigManager.bans.GeoIP.pathToGeoIPFiles
+                    + ConfigManager.bans.GeoIP.geoIPCountry);
         File asnFile = new File(
-                ConfigManager.bans.GeoIP.pathToGeoIPFiles
-              + ConfigManager.bans.GeoIP.geoIPASN);
-        showCity = ConfigManager.bans.GeoIP.ShowCity;
-        showDetail = ConfigManager.bans.GeoIP.ShowDetail;
-        showASN = ConfigManager.bans.GeoIP.ShowAsn;
+              ConfigManager.bans.GeoIP.pathToGeoIPFiles
+                    + ConfigManager.bans.GeoIP.geoIPASN);
+        showCity = ConfigManager.bans.GeoIP.ShowCity != null ? ConfigManager.bans.GeoIP.ShowCity : true;
+        showDetail = ConfigManager.bans.GeoIP.ShowDetail != null ? ConfigManager.bans.GeoIP.ShowDetail : false;
+        showASN = ConfigManager.bans.GeoIP.ShowAsn != null ? ConfigManager.bans.GeoIP.ShowAsn : false;
         if (!countryFile.exists()) {
             geSuit.getInstance().getLogger().warning("[GeoIP] No GeoIP"
-                    + " database is available locally.  Please install and "
-                    + "run GeoIpupdate from MaxMind");
+                  + " database is available locally.  Please install and "
+                  + "run GeoIpupdate from MaxMind");
             return;
         }
         try {

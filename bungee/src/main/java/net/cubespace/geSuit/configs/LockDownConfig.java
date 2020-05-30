@@ -1,17 +1,19 @@
 package net.cubespace.geSuit.configs;
 
-import net.cubespace.Yamler.Config.YamlConfig;
-import net.cubespace.geSuit.geSuit;
-
 import java.io.File;
 
 /**
  * @author benjamincharlton on 26/08/2015.
  */
 @SuppressWarnings("CanBeFinal")
-public class LockDownConfig extends YamlConfig {
+public class LockDownConfig extends BaseConfig {
+
     public LockDownConfig() {
-        CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "lockdown.yml");
+        super("lockdown");
+    }
+
+    protected LockDownConfig(File file) {
+        super(file);
     }
 
     public String LockdownTime = "5m";

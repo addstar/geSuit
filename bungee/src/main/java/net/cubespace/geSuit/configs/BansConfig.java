@@ -1,8 +1,6 @@
 package net.cubespace.geSuit.configs;
 
-import net.cubespace.Yamler.Config.YamlConfig;
 import net.cubespace.geSuit.configs.SubConfig.GeoIPSettings;
-import net.cubespace.geSuit.geSuit;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,10 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("CanBeFinal")
-public class BansConfig extends YamlConfig {
-    public BansConfig() {
-        CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "bans.yml");
-    }
+public class BansConfig extends BaseConfig {
 
     public Boolean Enabled = true;
     public Boolean BroadcastBans = true;
@@ -38,4 +33,12 @@ public class BansConfig extends YamlConfig {
     public HashMap<Integer, String> Actions = new HashMap<>();
 
     public GeoIPSettings GeoIP = new GeoIPSettings();
+
+    public BansConfig() {
+        super("bans");
+    }
+
+    protected BansConfig(File file) {
+        super(file);
+    }
 }
