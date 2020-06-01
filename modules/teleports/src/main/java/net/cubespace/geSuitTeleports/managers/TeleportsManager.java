@@ -5,19 +5,18 @@ import net.cubespace.geSuit.managers.DataManager;
 import net.cubespace.geSuitTeleports.geSuitTeleports;
 import net.cubespace.geSuitTeleports.utils.LocationUtil;
 
+import net.cubespace.geSuiteSpawn.managers.SpawnManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-
 
 public class TeleportsManager extends DataManager {
     public static final HashMap<String, Player> pendingTeleports = new HashMap<>();
@@ -410,5 +409,41 @@ public class TeleportsManager extends DataManager {
 
         instance.sendMessage(b);
 
+    }
+
+    public Location getPendingTeleportLocation(Player player, Location fallbackLocation) {
+        if (pendingTeleports.containsKey(player.getName())) {
+            Player t = pendingTeleports.get(player.getName());
+            pendingTeleports.remove(player.getName());
+            if ((t == null) || (!t.isOnline())) {
+                // Do nothing if player is not online
+                return null;
+            }
+            ignoreTeleport.add(player);
+            Location loc = t.getLocation();
+            if (getUtil().worldGuardTpAllowed(loc, player)) {
+                return loc;
+            } else {
+                return player.getWorld().getSpawnLocation();
+            }
+        } else if (pendingTeleportLocations.containsKey(player.getName())) {
+            Location loc = pendingTeleportLocations.get(player.getName());
+            pendingTeleportLocations.remove(player.getName());
+            if (!player.isOnline()) {
+                // Do nothing if player is not online
+                return null;
+            }
+            ignoreTeleport.add(player);
+            if (getUtil().worldGuardTpAllowed(loc, player)) {
+                return loc;
+            } else {
+                if ((geSuitTeleports.geSuitSpawns) && (SpawnManager.hasWorldSpawn(player.getWorld()))) {
+                    return SpawnManager.getPlayerWorldSpawn(player);
+                } else {
+                    return fallbackLocation;
+                }
+            }
+        }
+        return null;
     }
 }
