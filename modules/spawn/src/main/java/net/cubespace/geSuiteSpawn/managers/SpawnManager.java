@@ -139,11 +139,16 @@ public class SpawnManager extends DataManager {
 
     public void sendPlayerToWorldSpawn(CommandSender sender) {
         Player p = ( Player ) sender;
+        Location l = getPlayerWorldSpawn(p);
+        p.teleport(l);
+    }
+
+    public static Location getPlayerWorldSpawn(Player p) {
         Location l = getWorldSpawn( p.getWorld() );
         if ( l == null ) {
-            p.teleport( p.getWorld().getSpawnLocation() );
+            return p.getWorld().getSpawnLocation();
         } else {
-            p.teleport( getWorldSpawn( p.getWorld() ) );
+            return getWorldSpawn(p.getWorld());
         }
     }
 
