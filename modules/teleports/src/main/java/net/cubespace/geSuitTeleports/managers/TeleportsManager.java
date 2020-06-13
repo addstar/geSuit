@@ -7,10 +7,12 @@ import net.cubespace.geSuitTeleports.utils.LocationUtil;
 
 import net.cubespace.geSuiteSpawn.managers.SpawnManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -445,5 +447,29 @@ public class TeleportsManager extends DataManager {
             }
         }
         return null;
+    }
+
+    public void sendPlayerTop(final CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "You need to be a player to do this");
+            return;
+        }
+        final Player player = (Player) sender;
+        if (!player.hasPermission("gesuit.teleports.bypass.delay")) {
+            player.sendMessage(geSuitTeleports.teleportinitiated);
+            instance.getServer().getScheduler().runTaskLater(instance, () -> {
+                doTeleportTop(player);
+            }, 60L);
+        } else {
+            doTeleportTop(player);
+        }
+        return;
+    }
+
+    private void doTeleportTop(Player player) {
+        Location current = player.getLocation();
+        Location location = new Location(current.getWorld(), current.getX(), current.getWorld().getMaxHeight(), current.getZ(), current.getYaw(), current.getPitch());
+        player.teleport(getUtil().getSafeDestination(location), PlayerTeleportEvent.TeleportCause.COMMAND);
+        player.sendMessage(geSuitTeleports.tptop);
     }
 }
