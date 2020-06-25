@@ -1,17 +1,13 @@
 package net.cubespace.geSuit.configs;
 
 import net.cubespace.Yamler.Config.ConfigMode;
-import net.cubespace.Yamler.Config.YamlConfig;
-import net.cubespace.geSuit.geSuit;
-
-import java.io.File;
 
 @SuppressWarnings("CanBeFinal")
-public class Messages extends YamlConfig {
+public class Messages extends BaseConfig {
 
 
     public Messages() {
-        CONFIG_FILE = new File(geSuit.getInstance().getDataFolder(), "messages.yml");
+        super("messages");
         CONFIG_MODE = ConfigMode.FIELD_IS_KEY;
     }
 

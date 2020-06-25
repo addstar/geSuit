@@ -2,9 +2,11 @@ package net.cubespace.geSuit.managers;
 
 import au.com.addstar.bc.BungeeChat;
 
+import au.com.addstar.dripreporter.DripMeter;
 import net.cubespace.geSuit.Utilities;
 import net.cubespace.geSuit.events.NewPlayerJoinEvent;
 import net.cubespace.geSuit.geSuit;
+import net.cubespace.geSuit.listeners.PlayerListener;
 import net.cubespace.geSuit.objects.Ban;
 import net.cubespace.geSuit.objects.GSPlayer;
 import net.cubespace.geSuit.objects.Track;
@@ -38,59 +40,41 @@ public class PlayerManager {
     public static final HashMap<UUID, GSPlayer> cachedPlayers = new HashMap<>();
     public static final HashMap<String, GSPlayer> onlinePlayers = new HashMap<>();
     public static final ArrayList<ProxiedPlayer> kickedPlayers = new ArrayList<>();
+    private static DripMeter blockedLogins;
+
+    static {
+        if (geSuit.isMonitored()) {
+            blockedLogins = geSuit.getMonitor().addMeter(PlayerManager.class, "blockedLogins");
+        }
+    }
 
     public static boolean playerExists(ProxiedPlayer player) {
         return getPlayer(player.getName()) != null || playerExists(player.getUniqueId());
     }
-    
+
     public static boolean playerExists(UUID player) {
         return DatabaseManager.players.playerExists(Utilities.getStringFromUUID(player));
     }
 
+    private static void markBlockedLogin() {
+        if (geSuit.isMonitored()) {
+            blockedLogins.mark();
+        }
+    }
 
     public static void initPlayer(final PendingConnection connection, final LoginEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(geSuit.getInstance(), () -> {
             // Do ban check
-            if (DatabaseManager.bans.isPlayerBanned(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), connection.getAddress().getHostString())) {
-                Ban b = DatabaseManager.bans.getBanInfo(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), connection.getAddress().getHostString());
-
-                if (b != null) {
-                    if (b.getType().equals("tempban")) {
-                        if (BansManager.checkTempBan(b)) {
-                            event.setCancelled(true);
-
-                            Date then = b.getBannedUntil();
-                            Date now = new Date();
-                            long timeDiff = then.getTime() - now.getTime();
-
-                            event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.TEMP_BAN_MESSAGE.replace("{sender}", b.getBannedBy()).replace("{time}", sdf.format(then)).replace("{left}", Utilities.buildTimeDiffString(timeDiff, 2)).replace("{shortleft}", Utilities.buildShortTimeDiffString(timeDiff, 10)).replace("{message}", b.getReason()))));
-                            LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being temp banned!" + " (" + connection.getSocketAddress().toString() + ")");
-                        }
-                    } else {
-                        event.setCancelled(true);
-                        event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.BAN_PLAYER_MESSAGE.replace("{sender}", b.getBannedBy()).replace("{message}", b.getReason()))));
-                        LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being banned!" + " (" + connection.getSocketAddress().toString() + ")");
-                    }
-
-                    if (event.isCancelled()) {
-                        // Dont load this player as they wont be joining
-                        event.completeIntent(geSuit.getInstance());
-                        return;
-                    }
-                }
+            if (banCheck(event, connection)) {
+                markBlockedLogin();
+                return;
             }
 
             //lockdown check
             boolean playerExists = playerExists(connection.getUniqueId());
-            if (!playerExists) {//check player is new first
-                if (!LockDownManager.checkExpiry()) {//returns true if expired and false if persisting
-                    event.setCancelled(true);
-                    String timeRemaining = Utilities.buildShortTimeDiffString(LockDownManager.getExpiryTime() - System.currentTimeMillis(), 2);
-                    event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.LOCKDOWN_MESSAGE.replace("{message}", LockDownManager.getOptionalMessage()))));
-                    LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to server lockdown! Remaining: " + timeRemaining + ", Until: " + LockDownManager.getExpiryTimeString() + " (" + connection.getSocketAddress().toString() + ")");
-                    event.completeIntent(geSuit.getInstance());
-                    return;
-                }
+            if (!playerExists && lockDownCheck(event, connection)) {
+                markBlockedLogin();
+                return;
             }
 
             // Load the GSPlayer object for use
@@ -130,15 +114,57 @@ public class PlayerManager {
             event.completeIntent(geSuit.getInstance());
         });
     }
-    
+
+    private static boolean banCheck(LoginEvent event, PendingConnection connection) {
+        if (DatabaseManager.bans.isPlayerBanned(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), connection.getAddress().getHostString())) {
+            Ban b = DatabaseManager.bans.getBanInfo(connection.getName(), Utilities.getStringFromUUID(connection.getUniqueId()), connection.getAddress().getHostString());
+            if (b != null) {
+                if (b.getType().equals("tempban")) {
+                    if (BansManager.checkTempBan(b)) {
+                        event.setCancelled(true);
+                        Date then = b.getBannedUntil();
+                        Date now = new Date();
+                        long timeDiff = then.getTime() - now.getTime();
+                        event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.TEMP_BAN_MESSAGE.replace("{sender}", b.getBannedBy()).replace("{time}", sdf.format(then)).replace("{left}", Utilities.buildTimeDiffString(timeDiff, 2)).replace("{shortleft}", Utilities.buildShortTimeDiffString(timeDiff, 10)).replace("{message}", b.getReason()))));
+                        LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being temp banned!" + " (" + connection.getSocketAddress().toString() + ")");
+                    }
+                } else {
+                    event.setCancelled(true);
+                    event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.BAN_PLAYER_MESSAGE.replace("{sender}", b.getBannedBy()).replace("{message}", b.getReason()))));
+                    LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to being banned!" + " (" + connection.getSocketAddress().toString() + ")");
+                }
+                if (event.isCancelled()) {
+                    // Dont load this player as they wont be joining
+                    event.completeIntent(geSuit.getInstance());
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private static boolean lockDownCheck(LoginEvent event, PendingConnection connection) {
+        if (!LockDownManager.checkExpiry()) {//returns true if expired and false if persisting
+            event.setCancelled(true);
+            String timeRemaining = Utilities.buildShortTimeDiffString(LockDownManager.getExpiryTime() - System.currentTimeMillis(), 2);
+            event.setCancelReason(TextComponent.fromLegacyText(Utilities.colorize(ConfigManager.messages.LOCKDOWN_MESSAGE.replace("{message}", LockDownManager.getOptionalMessage()))));
+            LoggingManager.log(ChatColor.RED + connection.getName() + "'s connection refused due to server lockdown! Remaining: " + timeRemaining + ", Until: " + LockDownManager.getExpiryTimeString() + " (" + connection.getSocketAddress().toString() + ")");
+            event.completeIntent(geSuit.getInstance());
+            return true;
+        }
+        return false;
+    }
+
     /**
      * If this is the first connection in this session, this will do any needed final loading or setting up
-     * This also completes the creation process for new players 
+     * This also completes the creation process for new players
+     *
      * @param player The joining player
      * @return The GSPlayer instance for efficiency
      */
     public static GSPlayer confirmJoin(final ProxiedPlayer player) {
-    	final GSPlayer gsPlayer = cachedPlayers.get(player.getUniqueId());
+        final GSPlayer gsPlayer = cachedPlayers.get(player.getUniqueId());
         if (gsPlayer.firstConnect()) {
             // Do new player stuff
             if (gsPlayer.isFirstJoin()) {
