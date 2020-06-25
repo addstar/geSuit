@@ -18,6 +18,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -809,7 +810,7 @@ public class BansManager {
                     if (geSuit.proxy.getPlayer(searchString) != null) {
                         final ProxiedPlayer player = geSuit.proxy.getPlayer(searchString);
                         geSuit.proxy.getScheduler().runAsync(geSuit.getInstance(), () -> {
-                            List<String> location = GeoIPManager.detailLookup(player.getAddress().getAddress());
+                            List<String> location = GeoIPManager.detailLookup(((InetSocketAddress) player.getSocketAddress()).getAddress());
                             if (location.size() < 0) {
                                 PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] Player " + player.getName() + "'s IP resolves: ");
                                 location.forEach(s1 -> PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "[Tracker] " + s1));
