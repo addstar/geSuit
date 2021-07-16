@@ -1,12 +1,9 @@
 package net.cubespace.geSuit.managers;
 
-import au.com.addstar.bc.BungeeChat;
-
 import au.com.addstar.dripreporter.DripMeter;
 import net.cubespace.geSuit.Utilities;
 import net.cubespace.geSuit.events.NewPlayerJoinEvent;
 import net.cubespace.geSuit.geSuit;
-import net.cubespace.geSuit.listeners.PlayerListener;
 import net.cubespace.geSuit.objects.Ban;
 import net.cubespace.geSuit.objects.GSPlayer;
 import net.cubespace.geSuit.objects.Track;
@@ -260,14 +257,6 @@ public class PlayerManager {
         
         if (p == null) { // Unknown player
             return ConfigManager.messages.PLAYER_DOES_NOT_EXIST;
-        }
-        
-        // Vanished and not online
-        if (ConfigManager.main.BungeeChatIntegration) {
-	        if (BungeeChat.instance.getSyncManager().getPropertyBoolean(p.getProxiedPlayer(), "VNP:vanished", false) 
-	                && !BungeeChat.instance.getSyncManager().getPropertyBoolean(p.getProxiedPlayer(), "VNP:online", true)) {
-	            online = false;
-	        }
         }
         
         // Do a ban check

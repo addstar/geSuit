@@ -1,6 +1,6 @@
 package net.cubespace.geSuit;
 
-import au.com.addstar.bc.BungeeChat;
+import au.com.addstar.bpandora.MasterPlugin;
 import com.google.common.net.InetAddresses;
 import net.cubespace.geSuit.managers.ConfigManager;
 import net.cubespace.geSuit.managers.LoggingManager;
@@ -8,9 +8,8 @@ import net.cubespace.geSuit.profile.Profile;
 import net.cubespace.geSuit.tasks.DatabaseUpdateRowUUID;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import au.com.addstar.bpandora.modules.ChatControlMirror;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.*;
@@ -181,27 +180,16 @@ public class Utilities {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG).format(timeStamp);
     }
 
-    public static boolean doBungeeChatMirror(String channel, String msg) {
-		LoggingManager.log(ChatColor.translateAlternateColorCodes('&', msg));
+    public static boolean sendOnChatChannel(String channel, String msg) {
+        LoggingManager.log(ChatColor.translateAlternateColorCodes('&', msg));
 
-		// If BungeeChat integration is disabled, just log the message and exit
-		if (!ConfigManager.main.BungeeChatIntegration)
-			return true;
+        // ChatControl integration
+        if (ConfigManager.main.ChatControlIntegration)
+            ChatControlMirror.doChatControlMirror("String", channel, msg);
 
-		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(ostream);
-		try {
-			out.writeUTF("Mirror");
-			out.writeUTF(channel);
-			out.writeUTF(ChatColor.translateAlternateColorCodes('&', msg));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			return false;
-		}
-		BungeeChat.instance.getComLink().broadcastMessage("BungeeChat", ostream.toByteArray());
-		return true;
+        return true;
     }
-    
+
     public static UUID makeUUID(String uuid) {
         if (uuid.length() < 32) {
             throw new IllegalArgumentException("This is not a UUID");

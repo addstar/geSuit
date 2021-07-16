@@ -1,7 +1,5 @@
 package net.cubespace.geSuit.listeners;
 
-import au.com.addstar.dripreporter.DripMeter;
-
 import net.cubespace.geSuit.Utilities;
 import net.cubespace.geSuit.geSuit;
 import net.cubespace.geSuit.managers.ConfigManager;
@@ -105,14 +103,14 @@ public class PlayerListener implements Listener {
                                 replace("{player}", p.getName()).
                                 replace("{alt}", fAlt[0]).
                                 replace("{ip}", p.getIp());
-                        Utilities.doBungeeChatMirror("StaffNotice", msg);
+                        Utilities.sendOnChatChannel("StaffNotice", msg);
                     } else {
                         // Alt player is NOT banned
                         String msg = ConfigManager.messages.PLAYER_ALT_JOIN.
                                 replace("{player}", p.getName()).
                                 replace("{alt}", fAlt[0]).
                                 replace("{ip}", p.getIp());
-                        Utilities.doBungeeChatMirror("StaffNotice", msg);
+                        Utilities.sendOnChatChannel("StaffNotice", msg);
                     }
                 }
 
@@ -133,9 +131,7 @@ public class PlayerListener implements Listener {
                                 msg = ConfigManager.messages.PLAYER_NOGEOIP.
                                         replace("{player}", p.getName());
                             }
-                            Utilities.doBungeeChatMirror("StaffNotice",
-                                    msg);
-
+                            Utilities.sendOnChatChannel("StaffNotice", msg);
                         }
                     });
                 }

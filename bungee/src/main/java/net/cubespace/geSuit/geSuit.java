@@ -140,10 +140,6 @@ public class geSuit extends Plugin
         proxy.getPluginManager().registerListener(this, new SpawnMessageListener(legacy));
         proxy.getPluginManager().registerListener(this, new APIMessageListener(legacy));
         proxy.getPluginManager().registerListener(this, new AdminMessageListener(legacy));
-
-        if (ConfigManager.main.BungeeChatIntegration) {
-            proxy.getPluginManager().registerListener(this, new BungeeChatListener());
-        }
     }
 
 	public boolean isDebugEnabled() {

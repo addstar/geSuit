@@ -53,8 +53,8 @@ public class MainConfig extends BaseConfig {
     @Comment("Legacy channel handling...channels names prior to 1.13 were not namespaced...enabling this will support legacy and namespaced names.")
     public Boolean enableLegacy = false;
 
-    @Comment("Enable this if you want to use BungeeChat with geSuit.")
-    public Boolean BungeeChatIntegration = false;
+    @Comment("Enable this if you want to use ChatControl with geSuit.")
+    public Boolean ChatControlIntegration = false;
 
     @Comment("Do not alter this. It will be used automatically.")
     public Boolean Inited = false;

@@ -15,10 +15,10 @@
         <plugin.version>${project.version}-${build.number}</plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.api.version>1.13</spigot.api.version>
-        <spigot.version>1.16.1-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
         <worldedit.version>7.2.0-SNAPSHOT</worldedit.version>
         <worldgaurd.version>7.0.0-SNAPSHOT</worldgaurd.version>
-        <bungeecord.version>1.16-R0.2-SNAPSHOT</bungeecord.version>
+        <bungeecord.version>1.16-R0.5-SNAPSHOT</bungeecord.version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:AddstarMC/geSuit.git</connection>
