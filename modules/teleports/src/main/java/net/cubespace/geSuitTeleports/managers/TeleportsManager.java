@@ -431,10 +431,6 @@ public class TeleportsManager extends DataManager {
         } else if (pendingTeleportLocations.containsKey(player.getName())) {
             Location loc = pendingTeleportLocations.get(player.getName());
             pendingTeleportLocations.remove(player.getName());
-            if (!player.isOnline()) {
-                // Do nothing if player is not online
-                return null;
-            }
             ignoreTeleport.add(player);
             if (getUtil().worldGuardTpAllowed(loc, player)) {
                 return loc;
