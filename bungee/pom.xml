@@ -301,7 +301,7 @@
                         </relocation>
                         <relocation>
                             <pattern>net.cubespace.Yamler</pattern>
-                            <shadedPattern>au.com.addstar.bpandora.Yamler</shadedPattern>
+                            <shadedPattern>au.com.addstar.gesuit.Yamler</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
