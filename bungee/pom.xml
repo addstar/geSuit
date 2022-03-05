@@ -292,6 +292,9 @@
                         <includes>
                             <include>org.bstats:bstats-bungeecord</include>
                             <include>net.cubespace:Yamler-Core</include>
+                            <include>com.zaxxer:HikariCP</include>
+                            <include>com.maxmind.*</include>
+                            <include>com.fasterxml.jackson.core:*</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -313,7 +316,7 @@
                             </excludes>
                         </filter>
                         <filter>
-                            <artifact>net.cubespace:Yamler-Core:*</artifact>
+                            <artifact>*</artifact>
                             <excludes>
                                 <exclude>META-INF/MANIFEST.MF</exclude>
                             </excludes>
