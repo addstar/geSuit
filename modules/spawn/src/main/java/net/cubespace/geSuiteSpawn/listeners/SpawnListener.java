@@ -3,12 +3,14 @@ package net.cubespace.geSuiteSpawn.listeners;
 import net.cubespace.geSuiteSpawn.geSuitSpawn;
 import net.cubespace.geSuiteSpawn.managers.SpawnManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 public class SpawnListener implements Listener {
 
@@ -32,8 +34,9 @@ public class SpawnListener implements Listener {
             }, 10L );
         }
 
+        // Handle new player spawns
         Player p = e.getPlayer();
-        if (!p.hasPlayedBefore() && !p.isOp()) {
+        if (!p.hasPlayedBefore()) {
             if ( SpawnManager.hasWorldSpawn( p.getWorld() ) && p.hasPermission( "gesuit.spawns.new.world" ) ) {
                 manager.sendPlayerToWorldSpawn(p);
             } else if ( SpawnManager.hasServerSpawn() && p.hasPermission( "gesuit.spawns.new.server" ) ) {
@@ -42,28 +45,46 @@ public class SpawnListener implements Listener {
                 manager.sendPlayerToProxySpawn(p, true);
             }
         }
+    }
 
+    @EventHandler( priority = EventPriority.LOWEST, ignoreCancelled=true )
+    public void playerSpawn( PlayerSpawnLocationEvent e ) {
+        if (e.getSpawnLocation() == null || e.getSpawnLocation().getWorld() == null) {
+            System.out.println("World is invalid! Sending player to spawn!");
+            Location loc = getSpawnLocation(e.getPlayer());
+            if (loc != null) {
+                e.setSpawnLocation(loc);
+            } else {
+                manager.sendPlayerToProxySpawn(e.getPlayer(), true);
+            }
+        }
     }
 
     @EventHandler( priority = EventPriority.NORMAL, ignoreCancelled=true )
     public void playerRespawn( PlayerRespawnEvent e ) {
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
-        Player p = e.getPlayer();
-        if ( p.getBedSpawnLocation() != null && p.hasPermission( "gesuit.spawns.spawn.bed" ) ) {
-            e.setRespawnLocation( p.getBedSpawnLocation() );
-        } else if ( SpawnManager.hasWorldSpawn( p.getWorld() ) && p.hasPermission( "gesuit.spawns.spawn.world" ) ) {
-            e.setRespawnLocation( SpawnManager.getWorldSpawn( p.getWorld() ) );
-        } else if ( SpawnManager.hasServerSpawn() && p.hasPermission( "gesuit.spawns.spawn.server" ) ) {
-            e.setRespawnLocation( SpawnManager.getServerSpawn() );
-        } else if ( p.hasPermission( "gesuit.spawns.spawn.global" ) ) {
-            if ( SpawnManager.hasWorldSpawn( p.getWorld() ) ) {
-                e.setRespawnLocation( SpawnManager.getWorldSpawn( p.getWorld() ) );
-            } else if ( SpawnManager.hasServerSpawn() ) {
-                e.setRespawnLocation( SpawnManager.getServerSpawn() );
-            }
-
-            manager.sendPlayerToProxySpawn(p, true);
+        Location loc = getSpawnLocation(e.getPlayer());
+        if (loc != null) {
+            e.setRespawnLocation(loc);
+        } else {
+            manager.sendPlayerToProxySpawn(e.getPlayer(), true);
         }
     }
 
+    private Location getSpawnLocation(Player p) {
+        if ( p.getBedSpawnLocation() != null && p.hasPermission( "gesuit.spawns.spawn.bed" ) ) {
+            return p.getBedSpawnLocation();
+        } else if ( SpawnManager.hasWorldSpawn( p.getWorld() ) && p.hasPermission( "gesuit.spawns.spawn.world" ) ) {
+            return SpawnManager.getWorldSpawn( p.getWorld() );
+        } else if ( SpawnManager.hasServerSpawn() && p.hasPermission( "gesuit.spawns.spawn.server" ) ) {
+            return SpawnManager.getServerSpawn();
+        } else if ( p.hasPermission( "gesuit.spawns.spawn.global" ) ) {
+            if ( SpawnManager.hasWorldSpawn( p.getWorld() ) ) {
+                return SpawnManager.getWorldSpawn( p.getWorld() );
+            } else if ( SpawnManager.hasServerSpawn() ) {
+                return SpawnManager.getServerSpawn();
+            }
+        }
+        return null;
+    }
 }
