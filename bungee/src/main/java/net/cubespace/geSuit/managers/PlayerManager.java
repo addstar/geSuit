@@ -166,7 +166,6 @@ public class PlayerManager {
             // Do new player stuff
             if (gsPlayer.isFirstJoin()) {
                 DatabaseManager.players.insertPlayer(gsPlayer, player.getAddress().getHostString());
-                DatabaseManager.tracking.insertNameHistory(gsPlayer);
                 LoggingManager.log(ConfigManager.messages.PLAYER_CREATE.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()));
 
                 if (ConfigManager.main.NewPlayerBroadcast) {
