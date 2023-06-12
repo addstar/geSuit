@@ -12,8 +12,8 @@
     <repositories>
         <!-- WorldEdit, WorldGuard -->
         <repository>
-            <id>sk89q-mvn2</id>
-            <url>https://maven.sk89q.com/repo</url>
+            <id>enginehub-maven</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
     </repositories>
     <dependencies>
