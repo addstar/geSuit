@@ -16,9 +16,15 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>maven.addstar.com.au</id>
-            <name>maven.addstar.com.au-releases</name>
+            <id>addstar-releases</id>
             <url>https://maven.addstar.com.au/artifactory/ext-release-local</url>
+        </repository>
+        <repository>
+            <id>addstar-snapshots</id>
+            <url>https://maven.addstar.com.au/artifactory/ext-snapshots-local</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>codemc-releases</id>
