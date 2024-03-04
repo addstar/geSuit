@@ -231,7 +231,7 @@ public class LocationUtil {
         final int origZ = z;
         while (isBlockAboveAir(world, x, y, z)) {
             y -= 1;
-            if (y < 0) {
+            if (y < -64) {
                 y = origY;
                 break;
             }
@@ -286,7 +286,7 @@ public class LocationUtil {
         int y = (int) Math.round(loc.getY());
         final int z = loc.getBlockZ();
         int count = 0;
-        while (isBlockUnsafe(world, x, y, z) && y > -1) {
+        while (isBlockUnsafe(world, x, y, z) && y >= -65) {
             y--;
             count++;
             if (count > 2) {
@@ -294,7 +294,7 @@ public class LocationUtil {
             }
         }
 
-        return y < 0;
+        return y < -65;
     }
     
     /**
