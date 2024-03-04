@@ -30,6 +30,13 @@
             <artifactId>worldguard-legacy</artifactId>
             <version>${worldgaurd.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <!-- Don't pull in old Bukkit 1.13 API -->
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.cubespace</groupId>
