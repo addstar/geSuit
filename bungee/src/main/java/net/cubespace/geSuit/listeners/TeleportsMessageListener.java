@@ -110,6 +110,11 @@ public class TeleportsMessageListener extends MessageListener {
             return;
         }
 
+        if (task.equals("SendToServer")) {
+            TeleportManager.sendPlayerToServer(in.readUTF(), in.readUTF());
+            return;
+        }
+
         if (task.equals("SendVersion")) {
             LoggingManager.log(in.readUTF());
         }

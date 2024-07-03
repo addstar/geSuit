@@ -7,6 +7,7 @@ import net.cubespace.geSuit.pluginmessages.TPAFinalise;
 import net.cubespace.geSuit.pluginmessages.TeleportToLocation;
 import net.cubespace.geSuit.pluginmessages.TeleportToPlayer;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -237,6 +238,13 @@ public class TeleportManager {
 
         p.sendMessage(ConfigManager.messages.TELEPORTED_TO_PLAYER.replace("{player}", t.getName()));
     }
+    public static void sendPlayerToServer(String player, String server) {
+        GSPlayer p = PlayerManager.matchOnlinePlayer(player);
+        ServerInfo s = geSuit.proxy.getServerInfo(server);
+        // We dont need to give an error since this is an internal message only for now
+        // There is no user command that can trigger this
+        if (p == null || s == null || p.getServer().equals(server))
+            return;
+        p.getProxiedPlayer().connect(s);
+    }
 }
-
-

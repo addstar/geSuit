@@ -11,7 +11,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.bstats.bungeecord.Metrics;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
