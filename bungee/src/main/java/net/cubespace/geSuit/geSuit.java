@@ -11,8 +11,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.bstats.bungeecord.Metrics;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import lombok.Getter;
 
@@ -119,14 +118,11 @@ public class geSuit extends Plugin
                 getProxy().registerChannel(name.getLegacy().toLowerCase());   // For old legacy bukkit plugins
             }
         }
-        String lineEnd = System.getProperty("line.separator");
-        StringBuilder mess = new StringBuilder();
-        mess.append("Gesuit Report: Proxy has registered the following channels:" + lineEnd);
-        for (String channel : getProxy().getChannels()) {
-            mess.append(channel).append(lineEnd);
-        }
-        getProxy().getLogger().info(mess.toString());
-        
+        getProxy().getLogger().info("Gesuit Report: Proxy has registered the following channels:");
+        getProxy().getChannels().stream().sorted().forEach(channel -> {
+            getProxy().getLogger().info("  - " + channel);
+        });
+
         proxy.getPluginManager().registerListener(this, new PlayerListener());
         proxy.getPluginManager().registerListener(this, new TeleportsListener());
         proxy.getPluginManager().registerListener(this, new SpawnListener());
