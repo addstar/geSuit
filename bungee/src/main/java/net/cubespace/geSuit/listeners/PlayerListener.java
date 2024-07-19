@@ -147,6 +147,10 @@ public class PlayerListener implements Listener {
         int dcTime = ConfigManager.main.PlayerDisconnectDelay;
         
         final GSPlayer p = PlayerManager.cachedPlayers.remove(e.getPlayer().getUniqueId());
+        if (p == null) {
+            LoggingManager.log(ChatColor.RED + "Warning: PlayerDisconnectEvent called but player not found in geSuit player cache.");
+            return;		// Do nothing if the player is offline
+        }
         if (dcTime > 0) {
             geSuit.proxy.getScheduler().schedule(geSuit.getInstance(), () -> {
                 if (!PlayerManager.kickedPlayers.contains(e.getPlayer())) {
