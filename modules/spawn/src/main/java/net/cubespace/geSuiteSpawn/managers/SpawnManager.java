@@ -133,22 +133,32 @@ public class SpawnManager extends DataManager {
     }
 
     public void sendPlayerToServerSpawn(CommandSender sender) {
-        Player p = ( Player ) sender;
-        p.teleport( getServerSpawn() );
+        Player p = (Player) sender;
+        if (hasServerSpawn()) {
+            p.teleport(getServerSpawn());
+        } else {
+            sender.sendMessage(ChatColor.RED + "Error: No server spawn set.");
+            instance.getLogger().warning("Error: No server spawn set (player " + p.getName() + ")");
+        }
+        p.teleport(getServerSpawn());
     }
 
     public void sendPlayerToWorldSpawn(CommandSender sender) {
-        Player p = ( Player ) sender;
-        Location l = getPlayerWorldSpawn(p);
-        p.teleport(l);
+        Player p = (Player) sender;
+        if (hasWorldSpawn(p.getWorld())) {
+            p.teleport(getWorldSpawn(p.getWorld()));
+        } else {
+            sender.sendMessage(ChatColor.RED + "Error: No world spawn set for this world.");
+            instance.getLogger().warning("Error: No world spawn set for world: " + p.getWorld().getName() + " (player " + p.getName() + ")");
+        }
     }
 
     public static Location getPlayerWorldSpawn(Player p) {
-        Location l = getWorldSpawn( p.getWorld() );
-        if ( l == null ) {
+        Location spawn = getWorldSpawn(p.getWorld());
+        if (spawn == null) {
             return p.getWorld().getSpawnLocation();
         } else {
-            return getWorldSpawn(p.getWorld());
+            return spawn;
         }
     }
 
@@ -206,9 +216,9 @@ public class SpawnManager extends DataManager {
             }
         }
         if (hasWorldSpawn(p.getWorld()) && p.hasPermission("gesuit.spawns.spawn.world")) {
-            p.teleport( getWorldSpawn( p.getWorld() ) );
+            sendPlayerToWorldSpawn(p);
         } else if (hasServerSpawn() && p.hasPermission("gesuit.spawns.spawn.server")) {
-            p.teleport( getServerSpawn() );
+            sendPlayerToServerSpawn(p);
         } else if ( p.hasPermission( "gesuit.spawns.spawn.global" ) ) {
             sendPlayerToProxySpawn(p, false);
         }
