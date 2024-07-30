@@ -179,8 +179,11 @@ public class SpawnManager extends DataManager {
     }
 
     public void getSpawns() {
+        if (BukkitModule.isDebug()) instance.getLogger().info("geSuit DEBUG: Message \"GetSpawns\" sent to proxy");
+
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream( b );
+
         try {
             out.writeUTF( "GetSpawns" );
         } catch ( IOException e ) {

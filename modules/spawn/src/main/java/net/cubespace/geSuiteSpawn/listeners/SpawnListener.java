@@ -1,5 +1,6 @@
 package net.cubespace.geSuiteSpawn.listeners;
 
+import net.cubespace.geSuit.BukkitModule;
 import net.cubespace.geSuiteSpawn.geSuitSpawn;
 import net.cubespace.geSuiteSpawn.managers.SpawnManager;
 import org.bukkit.Bukkit;
@@ -26,7 +27,8 @@ public class SpawnListener implements Listener {
     public void playerLogin( PlayerJoinEvent e ) {
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
         if ( !SpawnManager.HAS_SPAWNS ) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, () -> {
+            if (BukkitModule.isDebug()) instance.getLogger().info("geSuit DEBUG: Spawns are empty, requesting from proxy");
+            Bukkit.getScheduler().runTaskLater(instance, () -> {
                 if (!SpawnManager.HAS_SPAWNS) {
                     manager.getSpawns();
                     SpawnManager.HAS_SPAWNS = true;

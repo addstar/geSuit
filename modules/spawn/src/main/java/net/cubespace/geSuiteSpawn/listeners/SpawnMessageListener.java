@@ -1,5 +1,6 @@
 package net.cubespace.geSuiteSpawn.listeners;
 
+import net.cubespace.geSuit.BukkitModule;
 import net.cubespace.geSuiteSpawn.geSuitSpawn;
 import net.cubespace.geSuiteSpawn.managers.SpawnManager;
 import org.bukkit.Bukkit;
@@ -30,6 +31,7 @@ public class SpawnMessageListener implements PluginMessageListener, Listener {
             task = in.readUTF();
             switch ( task ) {
                 case "SendSpawn":
+                    if (BukkitModule.isDebug()) instance.getLogger().info("geSuit DEBUG: Message \"SendSpawn\" received from proxy");
                     //                     spawnName worldName X Y Z yaw pitch
                     SpawnManager.addSpawn( in.readUTF(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat() );
                     break;
