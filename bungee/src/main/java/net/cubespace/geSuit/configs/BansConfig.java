@@ -3,10 +3,7 @@ package net.cubespace.geSuit.configs;
 import net.cubespace.geSuit.configs.SubConfig.GeoIPSettings;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("CanBeFinal")
 public class BansConfig extends BaseConfig {
@@ -27,8 +24,11 @@ public class BansConfig extends BaseConfig {
     public long KicksTimeOut = 600000; //time in ms that kicks are considered active
     public long TempBanTime = 300000; // Time in ms that a player is autobanned for
 
-    // List of strings to look for in ban reasons for the purposes of ignoring the ban when counting kicks
-    public List<String> KickReasonIgnoreList = new ArrayList<>(Collections.singletonList("AutoKick: Anti-AFK"));
+    // List of strings to look for in kick reasons for the purposes of ignoring the ban when counting kicks
+    public List<String> KickReasonIgnoreList = new ArrayList<>(Arrays.asList("AutoKick: Anti-AFK", "AutoKick: You have been idle too long"));
+
+    // List of strings to look for in kick reasons where kick should be silent (not broadcast)
+    public List<String> KickReasonSilent = new ArrayList<>(Arrays.asList("AutoKick: Anti-AFK", "AutoKick: You have been idle too long"));
 
     public HashMap<Integer, String> Actions = new HashMap<>();
 

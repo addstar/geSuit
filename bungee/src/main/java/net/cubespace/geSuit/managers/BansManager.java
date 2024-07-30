@@ -279,10 +279,13 @@ public class BansManager {
         }
 
         if (ConfigManager.bans.BroadcastKicks) {
-            if (auto) {
-            	PlayerManager.sendBroadcast(Utilities.colorize(ConfigManager.messages.KICK_PLAYER_AUTO_BROADCAST.replace("{player}", t.dispname).replace("{sender}", sender.getName())), t.name);
-            } else {
-            	PlayerManager.sendBroadcast(Utilities.colorize(ConfigManager.messages.KICK_PLAYER_BROADCAST.replace("{message}", reason).replace("{player}", t.dispname).replace("{sender}", sender.getName())), t.name);
+            // Only broadcast if the kick reason is not in the silent list
+            if (!kickReasonInList(reason, ConfigManager.bans.KickReasonSilent)) {
+                if (auto) {
+                    PlayerManager.sendBroadcast(Utilities.colorize(ConfigManager.messages.KICK_PLAYER_AUTO_BROADCAST.replace("{player}", t.dispname).replace("{sender}", sender.getName())), t.name);
+                } else {
+                    PlayerManager.sendBroadcast(Utilities.colorize(ConfigManager.messages.KICK_PLAYER_BROADCAST.replace("{message}", reason).replace("{player}", t.dispname).replace("{sender}", sender.getName())), t.name);
+                }
             }
         } else {
             PlayerManager.sendMessageToTarget(sender, ConfigManager.messages.KICK_PLAYER_BROADCAST.replace("{message}", reason).replace("{player}", t.dispname).replace("{sender}", sender.getName()));
@@ -1017,20 +1020,11 @@ public class BansManager {
     }
 
     private static void checkKickTempBan(int kickLimit, BanTarget t, String kickedBy, String reason) {
-
-
         long kickBanTime = TimeUnit.MILLISECONDS.toSeconds(ConfigManager.bans.TempBanTime);
         int kickCount = 0;
 
-        List<String> reasonIgnores = ConfigManager.bans.KickReasonIgnoreList;
-        if (!reasonIgnores.isEmpty()) {
-            for (String item : reasonIgnores) {
-                if (reason.contains(item)) {
-                    // Do not consider this ban when counting kicks
-                    // For example, ignore Anti-AFK autokicks
-                    return;
-                }
-            }
+        if (kickReasonInList(reason, ConfigManager.bans.KickReasonIgnoreList)) {
+            return;
         }
 
         if (kicks.size() > 0) {
@@ -1110,5 +1104,18 @@ public class BansManager {
         	target.gsp = t;
         }
     	return target;
+    }
+
+    private static boolean kickReasonInList(String reason, List<String> reasons) {
+        // Check if this kick reason contains any message in the list (for ignoring)
+        if ((reasons != null) && (reasons.size() > 0)) {
+            for (String ignore : reasons) {
+                if (reason.contains(ignore)) {
+                    // This kick reason is in the list
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
