@@ -25,7 +25,7 @@ public class geSuit extends Plugin
     
     private static geSuit instance;
     public static ProxyServer proxy;
-    private boolean DebugEnabled = false;
+    private int DebugEnabled = 0;
     public static APIManager api;
     @Getter
     private static DripReporterApi monitor;
@@ -138,10 +138,14 @@ public class geSuit extends Plugin
     }
 
 	public boolean isDebugEnabled() {
-		return DebugEnabled;
+		return (DebugEnabled > 0);
 	}
 
-	public void setDebugEnabled(boolean debugEnabled) {
+    public int getDebugLevel() {
+        return DebugEnabled;
+    }
+
+	public void setDebugEnabled(int debugEnabled) {
 		DebugEnabled = debugEnabled;
 	}
 

@@ -18,7 +18,15 @@ public class AdminMessageListener extends MessageListener {
     @EventHandler
     public void receivePluginMessage(PluginMessageEvent event) {
         if (geSuit.getInstance().isDebugEnabled()) {
-            Utilities.dumpPacket(event.getTag(), "RECV", event.getData(), true);
+            if (geSuit.getInstance().getDebugLevel() == 2) {
+                // Dump all packets
+                Utilities.dumpPacket(event.getTag(), "RECV", event.getData(), true);
+            } else {
+                // Only dump the packet if it is a geSuit packet
+                if (event.getTag().startsWith("gesuit:")) {
+                    Utilities.dumpPacket(event.getTag(), "RECV", event.getData(), false);
+                }
+            }
         }
         if (!eventMatched(event)) {
         }

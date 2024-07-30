@@ -3,6 +3,7 @@ package net.cubespace.geSuit.commands;
 import net.cubespace.geSuit.geSuit;
 import net.cubespace.geSuit.managers.ConfigManager;
 import net.cubespace.geSuit.managers.PlayerManager;
+import net.cubespace.geSuit.managers.SpawnManager;
 import net.cubespace.geSuit.objects.GSPlayer;
 import net.cubespace.geSuit.pluginmessages.EnableBukkitDebug;
 import net.md_5.bungee.api.ChatColor;
@@ -12,6 +13,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.protocol.packet.Chat;
 
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ public class DebugCommand extends Command
     private boolean ppvalid = false;
     private boolean gsvalid = false;
     private String sname = "";
+
     @Override
     public void execute(CommandSender sender, String[] args)
     {
@@ -37,79 +40,102 @@ public class DebugCommand extends Command
             return;
         }
 
-    	if (args.length == 0) {
-	
-	        // Toggle debug
-            geSuit.getInstance().setDebugEnabled(!geSuit.getInstance().isDebugEnabled());
-        
-            PlayerManager.sendMessageToTarget(sender, "geSuit debug is now: " + (geSuit.getInstance().isDebugEnabled() ? "ENABLED" : "DISABLED"));
-    	} else {
-    		String action = args[0];
-			switch (action) {
-				case "help":
-					PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "geSuit Debug Commands:");
-					PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug onlineplayers" + ChatColor.WHITE + " - Dump online player list");
-					PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug cachedplayers" + ChatColor.WHITE + " - Dump cached player list");
-                    PlayerManager.sendMessageToTarget(sender,
-                            ChatColor.YELLOW + "/gsdebug bukkitplugins <all|servername>" + ChatColor.WHITE +
-                                    " - Enable debugging on all or named server for all gesuit " +
-                                    "modules");
-
-                    break;
-				case "onlineplayers":
-					// Useful for troubleshooting issues with the onlinePlayers map
-					PlayerManager.sendMessageToTarget(sender, "List of entries in onlinePlayers:");
-					for (String player : PlayerManager.onlinePlayers.keySet()) {
-						GSPlayer gs = PlayerManager.onlinePlayers.get(player);
-                        gsvalid = false;
-                        ppvalid = false;
-                        sname = "";
-                        getPlayer(gs);
-						PlayerManager.sendMessageToTarget(sender, "  " + ChatColor.AQUA + player +
-								ChatColor.WHITE + " -> GS:" + (gsvalid ? ChatColor.GREEN + "yes" : ChatColor.RED + "no") +
-								ChatColor.WHITE + " / PP:" + (ppvalid ? ChatColor.GREEN + "yes" : ChatColor.RED + "no") +
-								ChatColor.WHITE + " / SRV:" + (!sname.isEmpty() ? ChatColor.GREEN + sname : ChatColor.RED + "none"));
-					}
-					break;
-				case "cachedplayers":
-					// Useful for troubleshooting issues with the onlinePlayers map
-					PlayerManager.sendMessageToTarget(sender, "List of entries in cachedplayers:");
-					for (UUID uuid : PlayerManager.cachedPlayers.keySet()) {
-						GSPlayer gs = PlayerManager.cachedPlayers.get(uuid);
-                        gsvalid = false;
-                        ppvalid = false;
-                        sname = "";
-                        getPlayer(gs);
-						PlayerManager.sendMessageToTarget(sender, "  " + ChatColor.AQUA + uuid +
-								ChatColor.WHITE + " -> GS:" + (gsvalid ? ChatColor.GREEN + "yes" + ChatColor.AQUA + " (" + gs.getName() + ")" : ChatColor.RED + "no") +
-								ChatColor.WHITE + " / PP:" + (ppvalid ? ChatColor.GREEN + "yes" : ChatColor.RED + "no") +
-								ChatColor.WHITE + " / SRV:" + (!sname.isEmpty() ? ChatColor.GREEN + sname : ChatColor.RED + "none"));
-					}
-					break;
-                case "bukkitplugins":
-
-                    if (args.length == 2) {
-                        String server = args[1];
-                        if (server.equalsIgnoreCase("all")) {
-                            for (ServerInfo serverInfo :
-                                    ProxyServer.getInstance().getConfigurationAdapter().getServers().values()) {
-                                EnableBukkitDebug.execute(serverInfo);
-                            }
-                        } else {
-                            if (ProxyServer.getInstance().getConfigurationAdapter().getServers().containsKey(server)) {
-                                ServerInfo s = ProxyServer.getInstance().getServerInfo(server);
-                                EnableBukkitDebug.execute(s);
-                            }
+        String action = "help";
+        if (args.length > 0) {
+            action = args[0];
+        }
+        switch (action) {
+            case "onlineplayers":
+                // Useful for troubleshooting issues with the onlinePlayers map
+                PlayerManager.sendMessageToTarget(sender, "List of entries in onlinePlayers:");
+                for (String player : PlayerManager.onlinePlayers.keySet()) {
+                    GSPlayer gs = PlayerManager.onlinePlayers.get(player);
+                    gsvalid = false;
+                    ppvalid = false;
+                    sname = "";
+                    getPlayer(gs);
+                    PlayerManager.sendMessageToTarget(sender, "  " + ChatColor.AQUA + player +
+                            ChatColor.WHITE + " -> GS:" + (gsvalid ? ChatColor.GREEN + "yes" : ChatColor.RED + "no") +
+                            ChatColor.WHITE + " / PP:" + (ppvalid ? ChatColor.GREEN + "yes" : ChatColor.RED + "no") +
+                            ChatColor.WHITE + " / SRV:" + (!sname.isEmpty() ? ChatColor.GREEN + sname : ChatColor.RED + "none"));
+                }
+                break;
+            case "cachedplayers":
+                // Useful for troubleshooting issues with the onlinePlayers map
+                PlayerManager.sendMessageToTarget(sender, "List of entries in cachedplayers:");
+                for (UUID uuid : PlayerManager.cachedPlayers.keySet()) {
+                    GSPlayer gs = PlayerManager.cachedPlayers.get(uuid);
+                    gsvalid = false;
+                    ppvalid = false;
+                    sname = "";
+                    getPlayer(gs);
+                    PlayerManager.sendMessageToTarget(sender, "  " + ChatColor.AQUA + uuid +
+                            ChatColor.WHITE + " -> GS:" + (gsvalid ? ChatColor.GREEN + "yes" + ChatColor.AQUA + " (" + gs.getName() + ")" : ChatColor.RED + "no") +
+                            ChatColor.WHITE + " / PP:" + (ppvalid ? ChatColor.GREEN + "yes" : ChatColor.RED + "no") +
+                            ChatColor.WHITE + " / SRV:" + (!sname.isEmpty() ? ChatColor.GREEN + sname : ChatColor.RED + "none"));
+                }
+                break;
+            case "bukkitplugins":
+                if (args.length == 2) {
+                    String server = args[1];
+                    if (server.equalsIgnoreCase("all")) {
+                        for (ServerInfo serverInfo :
+                                ProxyServer.getInstance().getConfigurationAdapter().getServers().values()) {
+                            EnableBukkitDebug.execute(serverInfo);
                         }
                     } else {
-                        PlayerManager.sendMessageToTarget(sender, "ERROR: bukkitplugins requires " +
-                                "parameter either all or servername");
-
+                        if (ProxyServer.getInstance().getConfigurationAdapter().getServers().containsKey(server)) {
+                            ServerInfo s = ProxyServer.getInstance().getServerInfo(server);
+                            EnableBukkitDebug.execute(s);
+                        }
                     }
-				default:
-					PlayerManager.sendMessageToTarget(sender, "ERROR: Invalid debug action");
-					break;
-			}
+                } else {
+                    PlayerManager.sendMessageToTarget(sender, "ERROR: bukkitplugins requires " +
+                            "parameter either all or servername");
+                }
+            case "pluginmsg":
+                if (args.length == 2) {
+                    String server = args[1];
+                    if (server.equalsIgnoreCase("all")) {
+                        geSuit.getInstance().setDebugEnabled(2);
+                        PlayerManager.sendMessageToTarget(sender, "geSuit debug is now: ALL");
+                    } else if (server.equalsIgnoreCase("gesuit")) {
+                        geSuit.getInstance().setDebugEnabled(1);
+                        PlayerManager.sendMessageToTarget(sender, "geSuit debug is now: GESUIT");
+                    } else {
+                        geSuit.getInstance().setDebugEnabled(0);
+                        PlayerManager.sendMessageToTarget(sender, "geSuit debug is now: OFF");
+                    }
+                } else {
+                    PlayerManager.sendMessageToTarget(sender, "ERROR: Usage /gsdebug pluginmsg <off|gesuit|all>");
+                }
+                break;
+            case "sendspawns":
+                // Send the list of spawns to the specified server
+                // This is useful for troubleshooting issues with the spawn system
+                // and for ensuring that the spawn list is up-to-date on all servers
+                if (args.length < 2) {
+                    PlayerManager.sendMessageToTarget(sender, "ERROR: Usage /gsdebug sendspawns <servername>");
+                    return;
+                }
+                ServerInfo s = ProxyServer.getInstance().getServerInfo(args[1]);
+                if (s == null) {
+                    PlayerManager.sendMessageToTarget(sender, "ERROR: Server " + args[1] + " not found");
+                    return;
+                }
+                PlayerManager.sendMessageToTarget(sender, "Sending spawn list to " + s.getName());
+                SpawnManager.sendSpawns(s);
+                break;
+            default:
+            case "help":
+                PlayerManager.sendMessageToTarget(sender, ChatColor.GREEN + "geSuit Debug Commands:");
+                PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug pluginmsg <off|gesuit|all>" + ChatColor.WHITE + " - Dump online player list");
+                PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug sendspawns <servername>" + ChatColor.WHITE + " - Send spawn list to server");
+                PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug onlineplayers" + ChatColor.WHITE + " - Dump online player list");
+                PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug cachedplayers" + ChatColor.WHITE + " - Dump cached player list");
+                PlayerManager.sendMessageToTarget(sender, ChatColor.YELLOW + "/gsdebug bukkitplugins <all|servername>"
+                        + ChatColor.WHITE + " - Enable debugging on all or named server for all gesuit " + "modules");
+                break;
 		}
     }
 

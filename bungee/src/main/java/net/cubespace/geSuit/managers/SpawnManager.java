@@ -60,8 +60,8 @@ public class SpawnManager {
     }
 
 
-    public static void sendSpawns(Server s) {
-        List<Spawn> spawnList = DatabaseManager.spawns.getSpawnsForServer(s.getInfo().getName());
+    public static void sendSpawns(ServerInfo s) {
+        List<Spawn> spawnList = DatabaseManager.spawns.getSpawnsForServer(s.getName());
 
         for (Spawn spawn : spawnList) {
             SendSpawn.execute(spawn);

@@ -32,7 +32,7 @@ public class SpawnMessageListener extends MessageListener {
                 SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(in.readUTF(), true));
                 break;
             case "GetSpawns":
-                SpawnManager.sendSpawns(s);
+                SpawnManager.sendSpawns(s.getInfo());
                 break;
             case "SetServerSpawn":
                 SpawnManager.setServerSpawn(PlayerManager.getPlayer(in.readUTF(), true), new Location(s.getInfo().getName(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat()), in.readBoolean());
