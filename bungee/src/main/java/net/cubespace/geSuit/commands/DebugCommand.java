@@ -84,9 +84,11 @@ public class DebugCommand extends Command
                             EnableBukkitDebug.execute(serverInfo);
                         }
                     } else {
-                        if (ProxyServer.getInstance().getConfigurationAdapter().getServers().containsKey(server)) {
-                            ServerInfo s = ProxyServer.getInstance().getServerInfo(server);
+                        ServerInfo s = ProxyServer.getInstance().getServerInfo(server);
+                        if (s != null) {
                             EnableBukkitDebug.execute(s);
+                        } else {
+                            PlayerManager.sendMessageToTarget(sender, "ERROR: Server " + server + " not found");
                         }
                     }
                 } else {

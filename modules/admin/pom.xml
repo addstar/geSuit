@@ -20,6 +20,42 @@
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.cubespace</groupId>
+            <artifactId>geSuitBans</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.cubespace</groupId>
+            <artifactId>geSuitHomes</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.cubespace</groupId>
+            <artifactId>geSuitSpawn</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.cubespace</groupId>
+            <artifactId>geSuitPortals</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.cubespace</groupId>
+            <artifactId>geSuitTeleports</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.cubespace</groupId>
+            <artifactId>geSuitWarps</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <parent>
         <groupId>net.cubespace</groupId>
