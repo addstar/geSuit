@@ -34,6 +34,7 @@ public class SpawnMessageListener implements PluginMessageListener, Listener {
                     if (BukkitModule.isDebug()) instance.getLogger().info("geSuit DEBUG: Message \"SendSpawn\" received from proxy");
                     //                     spawnName worldName X Y Z yaw pitch
                     SpawnManager.addSpawn( in.readUTF(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble(), in.readFloat(), in.readFloat() );
+                    SpawnManager.HAS_SPAWNS = true;  // Only set to true after receiving one, so we don't request again
                     break;
                 case "DelWorldSpawn":
                     //                           worldName

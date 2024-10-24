@@ -31,7 +31,6 @@ public class SpawnListener implements Listener {
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 if (!SpawnManager.HAS_SPAWNS) {
                     manager.getSpawns();
-                    SpawnManager.HAS_SPAWNS = true;
                 }
             }, 10L );
         }
