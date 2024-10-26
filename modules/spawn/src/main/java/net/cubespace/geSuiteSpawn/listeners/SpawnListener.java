@@ -24,7 +24,7 @@ public class SpawnListener implements Listener {
     }
 
     @EventHandler( priority = EventPriority.LOWEST )
-    public void playerLogin( PlayerJoinEvent e ) {
+    public void playerJoin( PlayerJoinEvent e ) {
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
         if ( !SpawnManager.HAS_SPAWNS ) {
             if (BukkitModule.isDebug()) instance.getLogger().info("geSuit DEBUG: Spawns are empty, requesting from proxy");
@@ -32,7 +32,7 @@ public class SpawnListener implements Listener {
                 if (!SpawnManager.HAS_SPAWNS) {
                     manager.getSpawns();
                 }
-            }, 10L );
+            }, 30L );
         }
 
         // Handle new player spawns
