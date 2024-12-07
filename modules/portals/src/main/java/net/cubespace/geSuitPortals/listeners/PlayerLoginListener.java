@@ -29,7 +29,7 @@ public class PlayerLoginListener implements Listener {
                     manager.requestPortals();
                 }
 
-            }, 10L);
+            }, 50L);
         }
         if (PortalsManager.pendingTeleports.containsKey(e.getPlayer().getName())) {
             Location l = PortalsManager.pendingTeleports.get(e.getPlayer().getName());
