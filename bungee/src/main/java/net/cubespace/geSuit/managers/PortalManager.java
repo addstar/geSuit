@@ -154,7 +154,7 @@ public class PortalManager {
     public static void listPortals(GSPlayer p) {
         for (ServerInfo s : portals.keySet()) {
             StringBuilder message = new StringBuilder();
-            String serverName = s.getName();
+            String serverName = s == null ? "unknown": s.getName();
             message.append(ChatColor.GOLD)
                     .append(serverName)
                     .append(": ")
