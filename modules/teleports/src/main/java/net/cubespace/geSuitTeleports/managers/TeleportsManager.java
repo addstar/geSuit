@@ -307,11 +307,11 @@ public class TeleportsManager extends DataManager {
             // check if the player is currently not on a block and there is no block below them
             // this means the player is probably falling in the void and trying to avoid death
             // cancel the teleport if they are, to avoid the player avoiding death by teleporting
-            LoggingManager.debug("[teleportPlayerToLocation] Checking if " + p.getName() + " is falling in the void (velocity: " + p.getVelocity().getY() + ")");
-            if ((p.getVelocity().getY() < 0) && (!LocationUtil.hasGroundBelow(p.getLocation()))) {
+            LoggingManager.debug("[teleportPlayerToLocation] Checking if " + p.getName() + " is falling (velocity: " + p.getVelocity().getY() + ")");
+            if ((p.getVelocity().getY() < 0) && (!LocationUtil.hasGroundBelow(p.getLocation(), 10))) {
                 if (!p.hasPermission("gesuit.teleports.bypass.void")) {
-                    LoggingManager.warn("Player " + p.getName() + " tried to be teleported while falling in the void (velocity: " + p.getVelocity().getY() + ")");
-                    p.sendMessage(ChatColor.RED + "Sorry, you cannot be teleported while falling in the void.");
+                    LoggingManager.warn("Player " + p.getName() + " tried to be teleported while falling (velocity: " + p.getVelocity().getY() + ")");
+                    p.sendMessage(ChatColor.RED + "Sorry, you cannot be teleported while falling.");
                     return;
                 }
             }
@@ -447,14 +447,14 @@ public class TeleportsManager extends DataManager {
             // check if the player is currently not on a block and there is no block below them
             // this means the player is probably falling in the void and trying to avoid death
             // cancel the teleport if they are, to avoid the player avoiding death by teleporting
-            LoggingManager.debug("[PendingTeleportLocation] Checking if " + player.getName() + " is falling in the void (velocity: " + player.getVelocity().getY() + ")");
-            if ((player.getVelocity().getY() < 0) && (!LocationUtil.hasGroundBelow(player.getLocation()))) {
+            LoggingManager.debug("[PendingTeleportLocation] Checking if " + player.getName() + " is falling (velocity: " + player.getVelocity().getY() + ")");
+            if ((player.getVelocity().getY() < 0) && (!LocationUtil.hasGroundBelow(player.getLocation(), 10))) {
                 if (!player.hasPermission("gesuit.teleports.bypass.void")) {
-                    LoggingManager.warn("Player " + player.getName() + " tried to be teleported while falling in the void (velocity: " + player.getVelocity().getY() + ")");
+                    LoggingManager.warn("Player " + player.getName() + " tried to be teleported while falling (velocity: " + player.getVelocity().getY() + ")");
                     // Player has probably not properly connected to the server yet so
                     // we have to delay sending a message to the player by a few ticks
                     instance.getServer().getScheduler().runTaskLater(instance, () -> {
-                        player.sendMessage(ChatColor.RED + "Sorry, you cannot be teleported while falling in the void.");
+                        player.sendMessage(ChatColor.RED + "Sorry, you cannot be teleported while falling.");
                     }, 5L);
                     return null;
                 }

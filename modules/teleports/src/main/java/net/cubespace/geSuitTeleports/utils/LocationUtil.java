@@ -353,8 +353,10 @@ public class LocationUtil {
     }
 
     // Check if there's ground below the player
-    public static boolean hasGroundBelow(Location location) {
-        for (int y = location.getBlockY() - 1; y >= location.getWorld().getMinHeight(); y--) {
+    public static boolean hasGroundBelow(Location location, int maxDistance) {
+        // Only check a certain distance below the player (either maxDistance or the bottom of the world)
+        int yrange = Math.min(location.getBlockY() - location.getWorld().getMinHeight(), maxDistance);
+        for (int y = location.getBlockY() - 1; y >= yrange; y--) {
             Block block = location.getWorld().getBlockAt(location.getBlockX(), y, location.getBlockZ());
             if (!block.getType().isAir()) { // Found a solid block
                 LoggingManager.debug("  [hasGroundBelow] Found " + block.getType() + " at " + block.getLocation().toString());
