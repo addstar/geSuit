@@ -1,6 +1,7 @@
 package net.cubespace.geSuitHomes.commands;
 
 import net.cubespace.geSuit.managers.CommandManager;
+import net.cubespace.geSuit.managers.LoggingManager;
 import net.cubespace.geSuitHomes.geSuitHomes;
 
 import org.bukkit.ChatColor;
@@ -53,6 +54,12 @@ public class HomeCommand extends CommandManager<HomesManager> {
 					return true;
 				} else {
 					if (!player.hasPermission("gesuit.homes.bypass.delay")) {
+						if (player.getVelocity().getY() < 0) {
+							LoggingManager.warn("Player " + player.getName() + " tried to teleport to a home while falling (velocity: " + player.getVelocity().getY() + ")");
+							player.sendMessage(ChatColor.RED + "You cannot teleport while falling.");
+							return true;
+						}
+
 						final Location lastLocation = player.getLocation();
 						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Teleportation will commence in &c3 seconds&6. Don't move."));
 
