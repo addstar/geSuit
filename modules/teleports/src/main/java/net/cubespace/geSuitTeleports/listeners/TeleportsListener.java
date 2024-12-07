@@ -1,5 +1,6 @@
 package net.cubespace.geSuitTeleports.listeners;
 
+import net.cubespace.geSuit.managers.LoggingManager;
 import net.cubespace.geSuitTeleports.geSuitTeleports;
 import net.cubespace.geSuitTeleports.managers.TeleportsManager;
 import net.cubespace.geSuiteSpawn.managers.SpawnManager;
@@ -29,8 +30,8 @@ public class TeleportsListener implements Listener {
         spawnsManager = spawnManager;
 	}
 	
-	@EventHandler
-	public void playerConnect (PlayerSpawnLocationEvent e){
+	@EventHandler(ignoreCancelled = true)
+	public void playerConnect(PlayerSpawnLocationEvent e){
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
 
 		// Check if there's any pending teleports for the player
@@ -40,7 +41,7 @@ public class TeleportsListener implements Listener {
 		}
 	}
 	
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void playerTeleport(PlayerTeleportEvent e){
         if (!manager.getUtil().worldGuardTpAllowed(e.getTo(), e.getPlayer())) { //cancel the event if the location is blocked
 			e.setCancelled(true);
@@ -77,7 +78,7 @@ public class TeleportsListener implements Listener {
         TeleportsManager.ignoreTeleport.add(e.getEntity());
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void playerJoin(final PlayerJoinEvent e) {
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
 

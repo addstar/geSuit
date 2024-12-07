@@ -18,7 +18,7 @@ public class BackCommand extends CommandManager<TeleportsManager> {
 			String label, String[] args) {
 
 		manager.sendPlayerBack(sender);
-			return true;
+		return true;
 	}
 
 }

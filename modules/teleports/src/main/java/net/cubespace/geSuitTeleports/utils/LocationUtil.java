@@ -1,6 +1,7 @@
 package net.cubespace.geSuitTeleports.utils;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.command.util.Logging;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
@@ -349,5 +350,18 @@ public class LocationUtil {
         }
         LoggingManager.debug("World guard check for TP completed: Player=" + p.getDisplayName() + " Location=(" + l.toString() + ") Region TP Allowed=" + result);
         return result;
+    }
+
+    // Check if there's ground below the player
+    public static boolean hasGroundBelow(Location location) {
+        for (int y = location.getBlockY() - 1; y >= location.getWorld().getMinHeight(); y--) {
+            Block block = location.getWorld().getBlockAt(location.getBlockX(), y, location.getBlockZ());
+            if (!block.getType().isAir()) { // Found a solid block
+                LoggingManager.debug("  [hasGroundBelow] Found " + block.getType() + " at " + block.getLocation().toString());
+                return true; // Allow teleport
+            }
+        }
+        LoggingManager.debug("  [hasGroundBelow] Found NO ground below " + location.toString());
+        return false; // No solid block found
     }
 }

@@ -2,6 +2,7 @@ package net.cubespace.geSuitTeleports.managers;
 
 import net.cubespace.geSuit.BukkitModule;
 import net.cubespace.geSuit.managers.DataManager;
+import net.cubespace.geSuit.managers.LoggingManager;
 import net.cubespace.geSuitTeleports.geSuitTeleports;
 import net.cubespace.geSuitTeleports.utils.LocationUtil;
 
@@ -303,6 +304,18 @@ public class TeleportsManager extends DataManager {
         //noinspection deprecation
         Player p = Bukkit.getPlayer( player );
         if ( p != null ) {
+            // check if the player is currently not on a block and there is no block below them
+            // this means the player is probably falling in the void and trying to avoid death
+            // cancel the teleport if they are, to avoid the player avoiding death by teleporting
+            LoggingManager.debug("[teleportPlayerToLocation] Checking if " + p.getName() + " is falling in the void (velocity: " + p.getVelocity().getY() + ")");
+            if ((p.getVelocity().getY() < 0) && (!LocationUtil.hasGroundBelow(p.getLocation()))) {
+                if (!p.hasPermission("gesuit.teleports.bypass.void")) {
+                    LoggingManager.warn("Player " + p.getName() + " tried to be teleported while falling in the void (velocity: " + p.getVelocity().getY() + ")");
+                    p.sendMessage(ChatColor.RED + "Sorry, you cannot be teleported while falling in the void.");
+                    return;
+                }
+            }
+
             //Check if Block is safe
             if (util.isBlockUnsafe(t.getWorld(), t.getBlockX(), t.getBlockY(), t.getBlockZ())) {
                 try {
@@ -413,7 +426,7 @@ public class TeleportsManager extends DataManager {
 
     }
 
-    public Location getPendingTeleportLocation(Player player, Location fallbackLocation) {
+    public Location getPendingTeleportLocation(final Player player, Location fallbackLocation) {
         if (pendingTeleports.containsKey(player.getName())) {
             Player t = pendingTeleports.get(player.getName());
             pendingTeleports.remove(player.getName());
@@ -431,6 +444,22 @@ public class TeleportsManager extends DataManager {
         } else if (pendingTeleportLocations.containsKey(player.getName())) {
             Location loc = pendingTeleportLocations.get(player.getName());
             pendingTeleportLocations.remove(player.getName());
+            // check if the player is currently not on a block and there is no block below them
+            // this means the player is probably falling in the void and trying to avoid death
+            // cancel the teleport if they are, to avoid the player avoiding death by teleporting
+            LoggingManager.debug("[PendingTeleportLocation] Checking if " + player.getName() + " is falling in the void (velocity: " + player.getVelocity().getY() + ")");
+            if ((player.getVelocity().getY() < 0) && (!LocationUtil.hasGroundBelow(player.getLocation()))) {
+                if (!player.hasPermission("gesuit.teleports.bypass.void")) {
+                    LoggingManager.warn("Player " + player.getName() + " tried to be teleported while falling in the void (velocity: " + player.getVelocity().getY() + ")");
+                    // Player has probably not properly connected to the server yet so
+                    // we have to delay sending a message to the player by a few ticks
+                    instance.getServer().getScheduler().runTaskLater(instance, () -> {
+                        player.sendMessage(ChatColor.RED + "Sorry, you cannot be teleported while falling in the void.");
+                    }, 5L);
+                    return null;
+                }
+            }
+
             ignoreTeleport.add(player);
             if (getUtil().worldGuardTpAllowed(loc, player)) {
                 return loc;
