@@ -55,8 +55,8 @@ public class HomeCommand extends CommandManager<HomesManager> {
 					return true;
 				} else {
 					if (!player.hasPermission("gesuit.homes.bypass.delay")) {
-						if (!player.hasPermission("gesuit.homes.bypass.void") && (player.getVelocity().getY() < 0)) {
-							LoggingManager.warn("Player " + player.getName() + " tried to teleport to a home while falling (velocity: " + player.getVelocity().getY() + ")");
+						if (!Utilities.isPlayerTeleportAllowed(player, player.getLocation())) {
+							LoggingManager.warn("Player " + player.getName() + " tried to be teleported while falling (" + player.getLocation() + ")");
 							player.sendMessage(ChatColor.RED + "You cannot teleport while falling.");
 							return true;
 						}
