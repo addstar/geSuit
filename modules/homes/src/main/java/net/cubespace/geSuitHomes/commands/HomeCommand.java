@@ -54,7 +54,7 @@ public class HomeCommand extends CommandManager<HomesManager> {
 					return true;
 				} else {
 					if (!player.hasPermission("gesuit.homes.bypass.delay")) {
-						if (player.getVelocity().getY() < 0) {
+						if (!player.hasPermission("gesuit.homes.bypass.void") && (player.getVelocity().getY() < 0)) {
 							LoggingManager.warn("Player " + player.getName() + " tried to teleport to a home while falling (velocity: " + player.getVelocity().getY() + ")");
 							player.sendMessage(ChatColor.RED + "You cannot teleport while falling.");
 							return true;
@@ -65,9 +65,6 @@ public class HomeCommand extends CommandManager<HomesManager> {
 
                         instance.getServer().getScheduler().runTaskLater(instance, () -> {
                             if (player.isOnline()) {
-                                if ((lastLocation == null) || (lastLocation.getBlock() == null))
-                                    return;
-
                                 if (lastLocation.getBlock().equals(player.getLocation().getBlock())) {
                                     player.sendMessage(ChatColor.GOLD + "Teleportation commencing...");
                                     player.saveData();
