@@ -195,7 +195,7 @@ public class Utilities {
         }
 
         // Check if player is falling
-        return hasGroundBelow(loc, 10);
+        return hasGroundBelow(loc, 5);
     }
 
     // Check if there's ground below the player
@@ -204,10 +204,11 @@ public class Utilities {
         int yrange = Math.min(location.getBlockY() - location.getWorld().getMinHeight(), maxDistance);
         LoggingManager.debug("[hasGroundBelow] Checking for ground below "
                 + location.getWorld().getName() + " " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()
-                + " (max distance: " + yrange + ")");
+                + " (: " + yrange + ")");
 
-        for (int y = location.getBlockY()-1; y >= yrange+1; y--) {
+        for (int y = location.getBlockY(); y >= (location.getBlockY()-yrange); y--) {
             Block block = location.getWorld().getBlockAt(location.getBlockX(), y, location.getBlockZ());
+            LoggingManager.debug("  [hasGroundBelow] Checking block " + block.getType() + " at " + block.getLocation().toString());
             if (!block.getType().isAir()) { // Found a solid block
                 LoggingManager.debug("  [hasGroundBelow] Found " + block.getType() + " at " + block.getLocation().toString());
                 return true; // Allow teleport
