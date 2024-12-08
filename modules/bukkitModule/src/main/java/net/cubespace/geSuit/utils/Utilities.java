@@ -206,7 +206,7 @@ public class Utilities {
                 + location.getWorld().getName() + " " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()
                 + " (max distance: " + yrange + ")");
 
-        for (int y = location.getBlockY(); y >= yrange; y--) {
+        for (int y = location.getBlockY()-1; y >= yrange+1; y--) {
             Block block = location.getWorld().getBlockAt(location.getBlockX(), y, location.getBlockZ());
             if (!block.getType().isAir()) { // Found a solid block
                 LoggingManager.debug("  [hasGroundBelow] Found " + block.getType() + " at " + block.getLocation().toString());
