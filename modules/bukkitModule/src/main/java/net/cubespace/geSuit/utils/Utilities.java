@@ -1,5 +1,10 @@
 package net.cubespace.geSuit.utils;
 
+import net.cubespace.geSuit.managers.LoggingManager;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+
 import java.text.DateFormat;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -179,6 +184,37 @@ public class Utilities {
             }
         }
         return data.toString();
+    }
+
+    // Check if player is falling
+    public static boolean isPlayerTeleportAllowed(Player player, Location loc) {
+        // Check if player has permission to bypass falling check or flying
+        if (player.hasPermission("gesuit.teleport.bypass.falling") || player.isFlying()) {
+            LoggingManager.debug("[isPlayerTeleportAllowed] Player " + player.getName() + " bypassed falling check (flying: " + player.isFlying() + ")");
+            return true;
+        }
+
+        // Check if player is falling
+        return hasGroundBelow(loc, 10);
+    }
+
+    // Check if there's ground below the player
+    public static boolean hasGroundBelow(Location location, int maxDistance) {
+        // Only check a certain distance below the player (either maxDistance or the bottom of the world)
+        int yrange = Math.min(location.getBlockY() - location.getWorld().getMinHeight(), maxDistance);
+        LoggingManager.debug("[hasGroundBelow] Checking for ground below "
+                + location.getWorld().getName() + " " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()
+                + " (max distance: " + yrange + ")");
+
+        for (int y = location.getBlockY(); y >= yrange; y--) {
+            Block block = location.getWorld().getBlockAt(location.getBlockX(), y, location.getBlockZ());
+            if (!block.getType().isAir()) { // Found a solid block
+                LoggingManager.debug("  [hasGroundBelow] Found " + block.getType() + " at " + block.getLocation().toString());
+                return true; // Allow teleport
+            }
+        }
+        LoggingManager.debug("  [hasGroundBelow] Found NO ground below " + location.toString());
+        return false; // No solid block found
     }
 }
 
